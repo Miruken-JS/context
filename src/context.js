@@ -306,9 +306,8 @@ const axisControl = {
     }},
     applyAxis = axisControl.axis;
 
-TraversingAxis.names.forEach(name => {
-    const key  = '$' + name.charAt(0).toLowerCase() + name.slice(1),
-          axis = TraversingAxis[name];
+TraversingAxis.items.forEach(axis => {
+    const key = '$' + axis.name.charAt(0).toLowerCase() + axis.name.slice(1);
     axisControl[key] = function () { return this.axis(axis); }
 });
 

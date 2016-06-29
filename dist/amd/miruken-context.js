@@ -240,9 +240,8 @@ define(['exports', 'miruken-core', 'miruken-callback'], function (exports, _miru
     },
         applyAxis = axisControl.axis;
 
-    _mirukenCore.TraversingAxis.names.forEach(function (name) {
-        var key = '$' + name.charAt(0).toLowerCase() + name.slice(1),
-            axis = _mirukenCore.TraversingAxis[name];
+    _mirukenCore.TraversingAxis.items.forEach(function (axis) {
+        var key = '$' + axis.name.charAt(0).toLowerCase() + axis.name.slice(1);
         axisControl[key] = function () {
             return this.axis(axis);
         };
