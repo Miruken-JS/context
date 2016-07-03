@@ -32,9 +32,7 @@
     }
   },
   "dependencies": {
-    "chai": "^1.10.0",
-    "grunt-cli": "latest",
-    "grunt-env": "latest"
+    "chai": "^1.10.0"
   },
   "devDependencies": {
     "babel-plugin-syntax-flow": "^6.5.0",
