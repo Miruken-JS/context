@@ -598,7 +598,7 @@ export const $contextual = MetaMacro.extend({
     }
 });
 
-implement({
+Context.implement({
     /**
      * Observes 'contextEnding' notification.
      * @method onEnding

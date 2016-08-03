@@ -370,7 +370,7 @@ System.register(['miruken-core', 'miruken-callback'], function (_export, _contex
 
             _export('$contextual', $contextual);
 
-            implement({
+            Context.implement({
                 onEnding: function onEnding(observer) {
                     return this.observe({ contextEnding: observer });
                 },

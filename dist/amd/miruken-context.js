@@ -334,7 +334,7 @@ define(['exports', 'miruken-core', 'miruken-callback'], function (exports, _miru
         }
     });
 
-    implement({
+    Context.implement({
         onEnding: function onEnding(observer) {
             return this.observe({ contextEnding: observer });
         },

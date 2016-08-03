@@ -1,6 +1,6 @@
 import { Context } from './context';
 
-implement({
+Context.implement({
     /**
      * Observes 'contextEnding' notification.
      * @method onEnding
