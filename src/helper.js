@@ -5,7 +5,7 @@ import {
 import { Context } from './context';
 
 /**
- * Mixin for {{#crossLink "miruken.context.Contextual"}}{{/crossLink}} helper support.
+ * Mixin for {{#crossLink "Contextual"}}{{/crossLink}} helper support.
  * @class ContextualHelper
  * @extends Module
  */    
@@ -13,7 +13,7 @@ export const ContextualHelper = Module.extend({
     /**
      * Resolves the receivers context.
      * @method resolveContext
-     * @returns {miruken.context.Context} receiver if a context or the receiver context. 
+     * @returns {Context} receiver if a context or the receiver context. 
      */                
     resolveContext(contextual) {
         return $isNothing(contextual) || (contextual instanceof Context)
@@ -49,9 +49,9 @@ export const ContextualHelper = Module.extend({
     /**
      * Attaches the context to the receiver.
      * @method bindContext
-     * @param  {miruken.context.Context}  context  -  context
-     * @param  {boolean}                  replace  -  true if replace existing context
-     * @returns {miruken.context.Context} effective context.
+     * @param  {Context}  context  -  context
+     * @param  {boolean}  replace  -  true if replace existing context
+     * @returns {Context} effective context.
      * @throws {Error} an error if the context could be attached.
      */                                        
     bindContext(contextual, context, replace) {
@@ -63,9 +63,9 @@ export const ContextualHelper = Module.extend({
     /**
      * Attaches a child context of the receiver to the contextual child.
      * @method bindChildContext
-     * @param  {miruken.context.Context}  child    -  contextual child
-     * @param  {boolean}                  replace  -  true if replace existing context
-     * @returns {miruken.context.Context} effective child context.
+     * @param  {Context}  child    -  contextual child
+     * @param  {boolean}  replace  -  true if replace existing context
+     * @returns {Context} effective child context.
      * @throws {Error} an error if the child context could be attached.
      */                                                
     bindChildContext(contextual, child, replace) {

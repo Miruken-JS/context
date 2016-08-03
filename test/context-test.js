@@ -6,6 +6,8 @@ import { Context, ContextState } from '../src/context';
 import { $contextual } from '../src/meta';
 import '../src/publish';
 
+import { expect } from 'chai';
+
 describe("Context", () => {
     const Dog = Base.extend({});
     

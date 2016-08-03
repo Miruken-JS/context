@@ -5,8 +5,8 @@ CallbackHandler.implement({
     /**
      * Establishes publish invocation semantics.
      * @method $publish
-     * @returns {miruken.callback.CallbackHandler} publish semantics.
-     * @for miruken.callback.CallbackHandler
+     * @returns {CallbackHandler} publish semantics.
+     * @for CallbackHandler
      */
     $publish() {
         let   composer = this;

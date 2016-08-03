@@ -38,9 +38,9 @@ if (Function.prototype.newInChildContext === undefined)
 const Axis = Symbol();
 
 /**
- * Represents the state of a {{#crossLink "miruken.context.Context"}}{{/crossLink}}.
+ * Represents the state of a {{#crossLink "Context"}}{{/crossLink}}.
  * @class ContextState
- * @extends miruken.Enum
+ * @extends Enum
  */
 export const ContextState = Enum({
     /**
@@ -62,33 +62,33 @@ export const ContextState = Enum({
 
 /**
  * Protocol for observing the lifecycle of
- * {{#crossLink "miruken.context.Context"}}{{/crossLink}}.
+ * {{#crossLink "Context"}}{{/crossLink}}.
  * @class ContextObserver
- * @extends miruken.Protocol
+ * @extends Protocol
  */
 export const ContextObserver = Protocol.extend({
     /**
      * Called when a context is in the process of ending.
      * @method contextEnding
-     * @param   {miruken.context.Context}  context
+     * @param  {Context}  context
      */
     contextEnding(context) {},
     /**
      * Called when a context has ended.
      * @method contextEnded
-     * @param   {miruken.context.Context}  context
+     * @param  {Context}  context
      */        
     contextEnded(context) {},
     /**
      * Called when a child context is in the process of ending.
      * @method childContextEnding
-     * @param   {miruken.context.Context}  childContext
+     * @param  {Context}  childContext
      */
     childContextEnding(childContext) {},
     /**
      * Called when a child context has ended.
      * @method childContextEnded
-     * @param   {miruken.context.Context}  childContext
+     * @param  {Context}  childContext
      */        
     childContextEnded(context) {}
 });
@@ -99,12 +99,12 @@ export const ContextObserver = Protocol.extend({
  * In addition, it maintains parent-child relationships and thus can participate in a hierarchy.
  * @class Context
  * @constructor
- * @param   {miruken.context.Context}  [parent]  -  parent context
- * @extends miruken.callback.CompositeCallbackHandler
- * @uses miruken.Parenting
- * @uses miruken.graph.Traversing
- * @uses miruken.graph.TraversingMixin
- * @uses miruken.Disposing
+ * @param  {Context}  [parent]  -  parent context
+ * @extends CompositeCallbackHandler
+ * @uses Parenting
+ * @uses Traversing
+ * @uses TraversingMixin
+ * @uses Disposing
  */    
 export const Context = CompositeCallbackHandler.extend(
     Parenting, Traversing, Disposing, TraversingMixin, {
@@ -127,13 +127,13 @@ export const Context = CompositeCallbackHandler.extend(
                 get id() { return _id },
                 /**
                  * Gets the context state.
-                 * @property {miruken.context.ContextState} state
+                 * @property {ContextState} state
                  * @readOnly
                  */
                 get state() { return _state; },
                 /**
                  * Gets the parent context.
-                 * @property {miruken.context.Context} parent
+                 * @property {Context} parent
                  * @readOnly
                  */                
                 get parent() { return _parent; },
@@ -151,7 +151,7 @@ export const Context = CompositeCallbackHandler.extend(
                 get hasChildren() { return _children.length > 0; },
                 /**
                  * Gets the root context.
-                 * @property {miruken.context.Context} root
+                 * @property {Context} root
                  * @readOnly
                  */                                
                 get root() {
@@ -181,7 +181,7 @@ export const Context = CompositeCallbackHandler.extend(
                  * Stores the object in the context.
                  * @method store
                  * @param  {Object} object  -  object to store
-                 * @returns {miruken.context.Context} receiving context.
+                 * @returns {Context} receiving context.
                  * @chainable
                  */                                                
                 store(object) {
@@ -219,10 +219,10 @@ export const Context = CompositeCallbackHandler.extend(
                 /**
                  * Handles the callback using the traversing axis.
                  * @method handleAxis
-                 * @param   {miruken.graph.TraversingAxis}     axis            -  any callback
-                 * @param   {Object}                           callback        -  any callback
-                 * @param   {boolean}                          [greedy=false]  -  true if handle greedily
-                 * @param   {miruken.callback.CallbackHandler} [composer]      -  composition handler
+                 * @param   {TraversingAxis}  axis            -  any callback
+                 * @param   {Object}          callback        -  any callback
+                 * @param   {boolean}         [greedy=false]  -  true if handle greedily
+                 * @param   {CallbackHandler} [composer]      -  composition handler
                  * @returns {boolean} true if the callback was handled, false otherwise.
                  */                
                 handleAxis(axis, callback, greedy, composer) {
@@ -235,7 +235,7 @@ export const Context = CompositeCallbackHandler.extend(
                 /**
                  * Subscribes to the context notifications.
                  * @method observe
-                 * @param   {miruken.context.ContextObserver}  observer  -  receives notifications
+                 * @param   {ContextObserver}  observer  -  receives notifications
                  * @returns {Function} unsubscribes from context notifications.
                  */                                
                 observe(observer) {
@@ -252,8 +252,8 @@ export const Context = CompositeCallbackHandler.extend(
                 /**
                  * Unwinds to the root context.
                  * @method unwindToRootContext
-                 * @param   {miruken.context.ContextObserver}  observer  -  receives notifications
-                 * @returns {miruken.context.Context} receiving context.
+                 * @param   {ContextObserver}  observer  -  receives notifications
+                 * @returns {Context} receiving context.
                  * @chainable
                  */                                                
                 unwindToRootContext() {
@@ -271,7 +271,7 @@ export const Context = CompositeCallbackHandler.extend(
                 /**
                  * Unwinds to the context by ending all children.
                  * @method unwind
-                 * @returns {miruken.context.Context} receiving context.
+                 * @returns {Context} receiving context.
                  * @chainable
                  */
                 unwind() {
@@ -283,7 +283,8 @@ export const Context = CompositeCallbackHandler.extend(
                 /**
                  * Ends the context.
                  * @method end
-                 */                                                                                end() { 
+                 */
+                end() { 
                     if (_state == ContextState.Active) {
                         const notifier = makeNotifier();
                         _state = ContextState.Ending;
@@ -313,9 +314,9 @@ const axisControl = {
     /**
      * Changes the default traversal axis.
      * @method axis
-     * @param   {miruken.graph.TraversingAxis}  axis  -  axis
-     * @returns {miruken.context.Context} callback handler axis.
-     * @for miruken.context.Context
+     * @param   {TraversingAxis}  axis  -  axis
+     * @returns {Context} callback handler axis.
+     * @for Context
      */
     axis(axis) {
         return this.decorate({
@@ -341,110 +342,110 @@ Context.implement(axisControl);
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "miruken.graph.TraversingAxis/Self:property"}}{{/crossLink}}.
+ * {{#crossLink "TraversingAxis/Self:property"}}{{/crossLink}}.
  * @method $self
- * @returns {miruken.context.Context} default traversal axis.
- * @for miruken.context.Context
+ * @returns {Context} default traversal axis.
+ * @for Context
  */
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "miruken.graph.TraversingAxis/Root:property"}}{{/crossLink}}.
+ * {{#crossLink "TraversingAxis/Root:property"}}{{/crossLink}}.
  * @method $root
- * @returns {miruken.context.Context} default traversal axis.
- * @for miruken.context.Context
+ * @returns {Context} default traversal axis.
+ * @for Context
  */
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "miruken.graph.TraversingAxis/Child:property"}}{{/crossLink}}.
+ * {{#crossLink "TraversingAxis/Child:property"}}{{/crossLink}}.
  * @method $child
- * @returns {miruken.context.Context} default traversal axis.
- * @for miruken.context.Context
+ * @returns {Context} default traversal axis.
+ * @for Context
  */
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "miruken.graph.TraversingAxis/Sibling:property"}}{{/crossLink}}.
+ * {{#crossLink "TraversingAxis/Sibling:property"}}{{/crossLink}}.
  * @method $sibling
- * @returns {miruken.context.Context} default traversal axis.
- * @for miruken.context.Context
+ * @returns {Context} default traversal axis.
+ * @for Context
  */
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "miruken.graph.TraversingAxis/Ancestor:property"}}{{/crossLink}}.
+ * {{#crossLink "TraversingAxis/Ancestor:property"}}{{/crossLink}}.
  * @method $ancestor
- * @returns {miruken.context.Context} default traversal axis.
- * @for miruken.context.Context
+ * @returns {Context} default traversal axis.
+ * @for Context
  */
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "miruken.graph.TraversingAxis/Descendant:property"}}{{/crossLink}}.
+ * {{#crossLink "TraversingAxis/Descendant:property"}}{{/crossLink}}.
  * @method $descendant
- * @returns {miruken.context.Context} default traversal axis.
- * @for miruken.context.Context
+ * @returns {Context} default traversal axis.
+ * @for Context
  */
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "miruken.graph.TraversingAxis/DescendantReverse:property"}}{{/crossLink}}.
+ * {{#crossLink "TraversingAxis/DescendantReverse:property"}}{{/crossLink}}.
  * @method $descendantReverse
- * @returns {miruken.context.Context} default traversal axis.
- * @for miruken.context.Context
+ * @returns {Context} default traversal axis.
+ * @for Context
  */        
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "miruken.graph.TraversingAxis/ChildOrSelf:property"}}{{/crossLink}}.
+ * {{#crossLink "TraversingAxis/ChildOrSelf:property"}}{{/crossLink}}.
  * @method $childOrSelf
- * @returns {miruken.context.Context} default traversal axis.
- * @for miruken.context.Context
+ * @returns {Context} default traversal axis.
+ * @for Context
  */
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "miruken.graph.TraversingAxis/SiblingOrSelf:property"}}{{/crossLink}}.
+ * {{#crossLink "TraversingAxis/SiblingOrSelf:property"}}{{/crossLink}}.
  * @method $siblingOrSelf
- * @returns {miruken.context.Context} default traversal axis.
- * @for miruken.context.Context
+ * @returns {Context} default traversal axis.
+ * @for Context
  */
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "miruken.graph.TraversingAxis/AncestorOrSelf:property"}}{{/crossLink}}.
+ * {{#crossLink "TraversingAxis/AncestorOrSelf:property"}}{{/crossLink}}.
  * @method $ancestorOrSelf
- * @returns {miruken.context.Context} default traversal axis.
- * @for miruken.context.Context
+ * @returns {Context} default traversal axis.
+ * @for Context
  */        
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "miruken.graph.TraversingAxis/DescendantOrSelf:property"}}{{/crossLink}}.
+ * {{#crossLink "TraversingAxis/DescendantOrSelf:property"}}{{/crossLink}}.
  * @method $descendantOrSelf
- * @returns {miruken.context.Context} default traversal axis.
- * @for miruken.context.Context
+ * @returns {Context} default traversal axis.
+ * @for Context
  */
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "miruken.graph.TraversingAxis/DescendantOrSelfReverse:property"}}{{/crossLink}}.
+ * {{#crossLink "TraversingAxis/DescendantOrSelfReverse:property"}}{{/crossLink}}.
  * @method $descendantOrSelfReverse
- * @returns {miruken.context.Context} default traversal axis.
- * @for miruken.context.Context
+ * @returns {Context} default traversal axis.
+ * @for Context
  */
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "miruken.graph.TraversingAxis/AncestorSiblingOrSelf:property"}}{{/crossLink}}.
+ * {{#crossLink "TraversingAxis/AncestorSiblingOrSelf:property"}}{{/crossLink}}.
  * @method $ancestorSiblingOrSelf
- * @returns {miruken.context.Context} default traversal axis.
- * @for miruken.context.Context
+ * @returns {Context} default traversal axis.
+ * @for Context
  */
 
 /**
- * Mixin for {{#crossLink "miruken.context.Contextual"}}{{/crossLink}} helper support.
+ * Mixin for {{#crossLink "Contextual"}}{{/crossLink}} helper support.
  * @class ContextualHelper
  * @extends Module
  */    
@@ -452,7 +453,7 @@ export const ContextualHelper = Module.extend({
     /**
      * Resolves the receivers context.
      * @method resolveContext
-     * @returns {miruken.context.Context} receiver if a context or the receiver context. 
+     * @returns {Context} receiver if a context or the receiver context. 
      */                
     resolveContext(contextual) {
         return $isNothing(contextual) || (contextual instanceof Context)
@@ -488,9 +489,9 @@ export const ContextualHelper = Module.extend({
     /**
      * Attaches the context to the receiver.
      * @method bindContext
-     * @param  {miruken.context.Context}  context  -  context
-     * @param  {boolean}                  replace  -  true if replace existing context
-     * @returns {miruken.context.Context} effective context.
+     * @param  {Context}  context  -  context
+     * @param  {boolean}  replace  -  true if replace existing context
+     * @returns {Context} effective context.
      * @throws {Error} an error if the context could be attached.
      */                                        
     bindContext(contextual, context, replace) {
@@ -502,9 +503,9 @@ export const ContextualHelper = Module.extend({
     /**
      * Attaches a child context of the receiver to the contextual child.
      * @method bindChildContext
-     * @param  {miruken.context.Context}  child    -  contextual child
-     * @param  {boolean}                  replace  -  true if replace existing context
-     * @returns {miruken.context.Context} effective child context.
+     * @param  {Context}  child    -  contextual child
+     * @param  {boolean}  replace  -  true if replace existing context
+     * @returns {Context} effective child context.
      * @throws {Error} an error if the child context could be attached.
      */                                                
     bindChildContext(contextual, child, replace) {
@@ -541,7 +542,7 @@ const ContextField = Symbol();
 export const ContextualMixin = Object.freeze({
     /**
      * The context associated with the receiver.
-     * @property {miruken.context.Context} context
+     * @property {Context} context
      */        
     get context() { return this[ContextField]; },
     set context(context) {
@@ -580,14 +581,14 @@ export const ContextualMixin = Object.freeze({
 /**
  * Metamacro to make classes contextual.<br/>
  * <pre>
- *    var Controller = Base.extend($contextual, {
+ *    const Controller = Base.extend($contextual, {
  *       action: function () {}
  *    })
  * </pre>
  * would give the Controller class contextual support.
  * @class $contextual
  * @constructor
- * @extends miruken.MetaMacro
+ * @extends MetaMacro
  */    
 export const $contextual = MetaMacro.extend({
     execute(step, metadata) {
@@ -597,13 +598,13 @@ export const $contextual = MetaMacro.extend({
     }
 });
 
-Context.implement({
+implement({
     /**
      * Observes 'contextEnding' notification.
      * @method onEnding
      * @param   {Function}  observer  -  receives notification
      * @returns {Function}  unsubscribes from 'contextEnding' notification.
-     * @for miruken.context.Context
+     * @for Context
      */
     onEnding(observer) {
         return this.observe({contextEnding: observer});
@@ -613,7 +614,7 @@ Context.implement({
      * @method onEnded
      * @param   {Function}  observer  -  receives notification
      * @returns {Function}  unsubscribes from 'contextEnded' notification.
-     * @for miruken.context.Context
+     * @for Context
      * @chainable
      */        
     onEnded(observer) {
@@ -624,7 +625,7 @@ Context.implement({
      * @method onChildEnding
      * @param   {Function}  observer  -  receives notification
      * @returns {Function}  unsubscribes from 'childContextEnding' notification.
-     * @for miruken.context.Context
+     * @for Context
      * @chainable
      */                
     onChildEnding(observer) {
@@ -635,7 +636,7 @@ Context.implement({
      * @method onChildEnded
      * @param   {Function}  observer  -  receives notification
      * @returns {Function}  unsubscribes from 'childContextEnded' notification.
-     * @for miruken.context.Context
+     * @for Context
      * @chainable
      */                        
     onChildEnded(observer) {
@@ -647,8 +648,8 @@ CallbackHandler.implement({
     /**
      * Establishes publish invocation semantics.
      * @method $publish
-     * @returns {miruken.callback.CallbackHandler} publish semantics.
-     * @for miruken.callback.CallbackHandler
+     * @returns {CallbackHandler} publish semantics.
+     * @for CallbackHandler
      */
     $publish() {
         let   composer = this;

@@ -1,12 +1,12 @@
 import { Context } from './context';
 
-Context.implement({
+implement({
     /**
      * Observes 'contextEnding' notification.
      * @method onEnding
      * @param   {Function}  observer  -  receives notification
      * @returns {Function}  unsubscribes from 'contextEnding' notification.
-     * @for miruken.context.Context
+     * @for Context
      */
     onEnding(observer) {
         return this.observe({contextEnding: observer});
@@ -16,7 +16,7 @@ Context.implement({
      * @method onEnded
      * @param   {Function}  observer  -  receives notification
      * @returns {Function}  unsubscribes from 'contextEnded' notification.
-     * @for miruken.context.Context
+     * @for Context
      * @chainable
      */        
     onEnded(observer) {
@@ -27,7 +27,7 @@ Context.implement({
      * @method onChildEnding
      * @param   {Function}  observer  -  receives notification
      * @returns {Function}  unsubscribes from 'childContextEnding' notification.
-     * @for miruken.context.Context
+     * @for Context
      * @chainable
      */                
     onChildEnding(observer) {
@@ -38,7 +38,7 @@ Context.implement({
      * @method onChildEnded
      * @param   {Function}  observer  -  receives notification
      * @returns {Function}  unsubscribes from 'childContextEnded' notification.
-     * @for miruken.context.Context
+     * @for Context
      * @chainable
      */                        
     onChildEnded(observer) {

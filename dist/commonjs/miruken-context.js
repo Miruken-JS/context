@@ -337,7 +337,7 @@ var $contextual = exports.$contextual = _mirukenCore.MetaMacro.extend({
     }
 });
 
-Context.implement({
+implement({
     onEnding: function onEnding(observer) {
         return this.observe({ contextEnding: observer });
     },

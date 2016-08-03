@@ -13,7 +13,7 @@ const ContextField = Symbol();
 export const ContextualMixin = Object.freeze({
     /**
      * The context associated with the receiver.
-     * @property {miruken.context.Context} context
+     * @property {Context} context
      */        
     get context() { return this[ContextField]; },
     set context(context) {
@@ -52,14 +52,14 @@ export const ContextualMixin = Object.freeze({
 /**
  * Metamacro to make classes contextual.<br/>
  * <pre>
- *    var Controller = Base.extend($contextual, {
+ *    const Controller = Base.extend($contextual, {
  *       action: function () {}
  *    })
  * </pre>
  * would give the Controller class contextual support.
  * @class $contextual
  * @constructor
- * @extends miruken.MetaMacro
+ * @extends MetaMacro
  */    
 export const $contextual = MetaMacro.extend({
     execute(step, metadata) {
