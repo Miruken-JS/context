@@ -3,7 +3,7 @@ import {
 } from 'miruken-core';
 
 import { Context, ContextState } from '../src/context';
-import { $contextual } from '../src/meta';
+import { contextual } from '../src/contextual';
 import '../src/publish';
 
 import { expect } from 'chai';
@@ -468,7 +468,7 @@ describe("Contextual", () => {
         }
     });
     
-    const Controller = Base.extend($contextual, {
+    const Controller = Base.extend(contextual, {
         shutdown(shutdown) {}
     });
 

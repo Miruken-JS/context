@@ -4,7 +4,8 @@ define(['exports', 'miruken-core', 'miruken-callback'], function (exports, _miru
     Object.defineProperty(exports, "__esModule", {
         value: true
     });
-    exports.$contextual = exports.ContextualMixin = exports.ContextualHelper = exports.Context = exports.ContextObserver = exports.ContextState = undefined;
+    exports.ContextualMixin = exports.ContextualHelper = exports.Context = exports.ContextObserver = exports.ContextState = undefined;
+    exports.contextual = contextual;
 
     if (Function.prototype.newInContext === undefined) Function.prototype.newInContext = function () {
         var args = Array.prototype.slice.call(arguments),
@@ -326,14 +327,6 @@ define(['exports', 'miruken-core', 'miruken-callback'], function (exports, _miru
         }
     });
 
-    var $contextual = exports.$contextual = _mirukenCore.MetaMacro.extend({
-        execute: function execute(step, metadata) {
-            if (step === _mirukenCore.MetaStep.Subclass) {
-                metadata.type.implement(ContextualMixin);
-            }
-        }
-    });
-
     Context.implement({
         onEnding: function onEnding(observer) {
             return this.observe({ contextEnding: observer });
@@ -367,4 +360,8 @@ define(['exports', 'miruken-core', 'miruken-callback'], function (exports, _miru
             return composer.$notify();
         }
     });
+
+    function contextual(target) {
+        target.implement(ContextualMixin);
+    }
 });

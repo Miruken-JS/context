@@ -1,4 +1,4 @@
-import {Enum,Protocol,Parenting,Disposing,Traversing,TraversingAxis,TraversingMixin,$isSomething,$isNothing,$classOf,$equals,$decorated,assignID,Module,MetaStep,MetaMacro} from 'miruken-core';
+import {Enum,Protocol,Parenting,Disposing,Traversing,TraversingAxis,TraversingMixin,$isSomething,$isNothing,$classOf,$equals,$decorated,assignID,Module} from 'miruken-core';
 import {Composition,CompositeCallbackHandler,$provide,CallbackHandler} from 'miruken-callback';
 
 /**
@@ -578,26 +578,6 @@ export const ContextualMixin = Object.freeze({
     }
 });
 
-/**
- * Metamacro to make classes contextual.<br/>
- * <pre>
- *    const Controller = Base.extend($contextual, {
- *       action: function () {}
- *    })
- * </pre>
- * would give the Controller class contextual support.
- * @class $contextual
- * @constructor
- * @extends MetaMacro
- */    
-export const $contextual = MetaMacro.extend({
-    execute(step, metadata) {
-        if (step === MetaStep.Subclass) {
-            metadata.type.implement(ContextualMixin);
-        }
-    }
-});
-
 Context.implement({
     /**
      * Observes 'contextEnding' notification.
@@ -668,3 +648,18 @@ CallbackHandler.implement({
         return composer.$notify();
     }
 });
+
+/**
+ * Decorator to make classes contextual.<br/>
+ * <pre>
+ *    const Controller = Base.extend(contextual, {
+ *       action: function () {}
+ *    })
+ * </pre>
+ * would give the Controller class contextual support.
+ * @method contextual
+ * @param {Function}  target  -  target to contextualize
+ */    
+export function contextual(target) {
+    target.implement(ContextualMixin);    
+}

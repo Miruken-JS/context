@@ -3,7 +3,7 @@
 System.register(['miruken-core', 'miruken-callback'], function (_export, _context) {
     "use strict";
 
-    var Enum, Protocol, Parenting, Disposing, Traversing, TraversingAxis, TraversingMixin, $isSomething, $isNothing, $classOf, $equals, $decorated, assignID, Module, MetaStep, MetaMacro, Composition, CompositeCallbackHandler, $provide, CallbackHandler, Axis, ContextState, ContextObserver, Context, axisControl, applyAxis, ContextualHelper, ContextField, ContextualMixin, $contextual;
+    var Enum, Protocol, Parenting, Disposing, Traversing, TraversingAxis, TraversingMixin, $isSomething, $isNothing, $classOf, $equals, $decorated, assignID, Module, Composition, CompositeCallbackHandler, $provide, CallbackHandler, Axis, ContextState, ContextObserver, Context, axisControl, applyAxis, ContextualHelper, ContextField, ContextualMixin;
     return {
         setters: [function (_mirukenCore) {
             Enum = _mirukenCore.Enum;
@@ -20,8 +20,6 @@ System.register(['miruken-core', 'miruken-callback'], function (_export, _contex
             $decorated = _mirukenCore.$decorated;
             assignID = _mirukenCore.assignID;
             Module = _mirukenCore.Module;
-            MetaStep = _mirukenCore.MetaStep;
-            MetaMacro = _mirukenCore.MetaMacro;
         }, function (_mirukenCallback) {
             Composition = _mirukenCallback.Composition;
             CompositeCallbackHandler = _mirukenCallback.CompositeCallbackHandler;
@@ -360,16 +358,6 @@ System.register(['miruken-core', 'miruken-callback'], function (_export, _contex
 
             _export('ContextualMixin', ContextualMixin);
 
-            _export('$contextual', $contextual = MetaMacro.extend({
-                execute: function execute(step, metadata) {
-                    if (step === MetaStep.Subclass) {
-                        metadata.type.implement(ContextualMixin);
-                    }
-                }
-            }));
-
-            _export('$contextual', $contextual);
-
             Context.implement({
                 onEnding: function onEnding(observer) {
                     return this.observe({ contextEnding: observer });
@@ -403,6 +391,12 @@ System.register(['miruken-core', 'miruken-callback'], function (_export, _contex
                     return composer.$notify();
                 }
             });
+
+            function contextual(target) {
+                target.implement(ContextualMixin);
+            }
+
+            _export('contextual', contextual);
         }
     };
 });

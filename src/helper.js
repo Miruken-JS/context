@@ -17,8 +17,8 @@ export const ContextualHelper = Module.extend({
      */                
     resolveContext(contextual) {
         return $isNothing(contextual) || (contextual instanceof Context)
-            ? contextual
-            : contextual.context;
+             ? contextual
+             : contextual.context;
     },
     /**
      * Ensure the receiver is associated with a context.

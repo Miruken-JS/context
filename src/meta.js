@@ -1,5 +1,4 @@
 import { ContextState } from './context';
-import { MetaStep, MetaMacro } from 'miruken-core';
 
 const ContextField = Symbol();
 
@@ -46,25 +45,5 @@ export const ContextualMixin = Object.freeze({
     endContext() {
         const field = this[ContextField];        
         if (field) field.end();
-    }
-});
-
-/**
- * Metamacro to make classes contextual.<br/>
- * <pre>
- *    const Controller = Base.extend($contextual, {
- *       action: function () {}
- *    })
- * </pre>
- * would give the Controller class contextual support.
- * @class $contextual
- * @constructor
- * @extends MetaMacro
- */    
-export const $contextual = MetaMacro.extend({
-    execute(step, metadata) {
-        if (step === MetaStep.Subclass) {
-            metadata.type.implement(ContextualMixin);
-        }
     }
 });
