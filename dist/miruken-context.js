@@ -209,8 +209,8 @@ export const Context = CompositeCallbackHandler.extend(
                     } else {
                         this.traverse(axis, node => {
                             handled = handled | ($equals(node, this)
-                                                 ? this.base(callback, greedy, composer)
-                                                 : node.handleAxis(TraversingAxis.Self, callback, greedy, composer));
+                                    ? this.base(callback, greedy, composer)
+                                    : node.handleAxis(TraversingAxis.Self, callback, greedy, composer));
                             return handled && !greedy;
                         }, this);
                     }
@@ -457,8 +457,8 @@ export const ContextualHelper = Module.extend({
      */                
     resolveContext(contextual) {
         return $isNothing(contextual) || (contextual instanceof Context)
-            ? contextual
-            : contextual.context;
+             ? contextual
+             : contextual.context;
     },
     /**
      * Ensure the receiver is associated with a context.
