@@ -1,8 +1,5 @@
-import {
-    Module, $isNothing
-} from 'miruken-core';
-
-import { Context } from './context';
+import { Module, $isNothing } from "miruken-core";
+import { Context } from "./context";
 
 /**
  * Mixin for {{#crossLink "Contextual"}}{{/crossLink}} helper support.

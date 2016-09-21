@@ -269,7 +269,7 @@ System.register(['miruken-core', 'miruken-callback'], function (_export, _contex
 
 
             TraversingAxis.items.forEach(function (axis) {
-                var key = '$' + axis.name.charAt(0).toLowerCase() + axis.name.slice(1);
+                var key = "$" + axis.name.charAt(0).toLowerCase() + axis.name.slice(1);
                 axisControl[key] = function () {
                     return this.axis(axis);
                 };

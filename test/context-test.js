@@ -1,12 +1,12 @@
 import {
     True, Base, Protocol, $using
-} from 'miruken-core';
+} from "miruken-core";
 
-import { Context, ContextState } from '../src/context';
-import { contextual } from '../src/contextual';
-import '../src/publish';
+import { Context, ContextState } from "../src/context";
+import { contextual } from "../src/contextual";
+import "../src/publish";
 
-import { expect } from 'chai';
+import { expect } from "chai";
 
 describe("Context", () => {
     const Dog = Base.extend({});

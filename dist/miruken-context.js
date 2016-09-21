@@ -334,7 +334,7 @@ const axisControl = {
     applyAxis = axisControl.axis;
 
 TraversingAxis.items.forEach(axis => {
-    const key = '$' + axis.name.charAt(0).toLowerCase() + axis.name.slice(1);
+    const key = "$" + axis.name.charAt(0).toLowerCase() + axis.name.slice(1);
     axisControl[key] = function () { return this.axis(axis); }
 });
 

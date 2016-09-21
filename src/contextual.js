@@ -1,4 +1,4 @@
-import { ContextualMixin } from './meta';
+import { ContextualMixin } from "./mixin";
 
 /**
  * Decorator to make classes contextual.<br/>

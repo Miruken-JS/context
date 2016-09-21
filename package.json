@@ -21,7 +21,9 @@
     "directories": {
       "dist": "dist/amd"
     },
-    "dependencies": {},
+    "dependencies": {
+      "reflect-metadata": "^0.1.8"
+    },
     "devDependencies": {
       "babel": "babel-core@^5.8.24",
       "babel-runtime": "^5.8.24",
@@ -32,7 +34,8 @@
     }
   },
   "dependencies": {
-    "chai": "^1.10.0"
+    "chai": "^1.10.0",
+    "reflect-metadata": "^0.1.8"
   },
   "devDependencies": {
     "babel-plugin-syntax-flow": "^6.5.0",
