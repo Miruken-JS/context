@@ -4,6 +4,12 @@ System.register(['miruken-core', 'miruken-callback'], function (_export, _contex
     "use strict";
 
     var Enum, Protocol, Parenting, Disposing, Traversing, TraversingAxis, TraversingMixin, $isSomething, $isNothing, $classOf, $equals, $decorated, assignID, Module, Composition, CompositeCallbackHandler, $provide, CallbackHandler, Axis, ContextState, ContextObserver, Context, axisControl, applyAxis, ContextualHelper, ContextField, ContextualMixin;
+    function contextual(target) {
+        target.implement(ContextualMixin);
+    }
+
+    _export('contextual', contextual);
+
     return {
         setters: [function (_mirukenCore) {
             Enum = _mirukenCore.Enum;
@@ -391,12 +397,6 @@ System.register(['miruken-core', 'miruken-callback'], function (_export, _contex
                     return composer.$notify();
                 }
             });
-
-            function contextual(target) {
-                target.implement(ContextualMixin);
-            }
-
-            _export('contextual', contextual);
         }
     };
 });
