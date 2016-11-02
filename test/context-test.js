@@ -242,10 +242,10 @@ describe("Context", () => {
                   child3     = root.newChild(),
                   grandChild = child3.newChild();
             child3.store(dog);
-            expect(child1.$childOrSelf().resolve(Dog)).to.be.undefined;
-            expect(grandChild.$childOrSelf().resolve(Dog)).to.be.undefined;
-            expect(child3.$childOrSelf().resolve(Dog)).to.equal(dog);
-            expect(root.$childOrSelf().resolve(Dog)).to.equal(dog);
+            expect(child1.$selfOrChild().resolve(Dog)).to.be.undefined;
+            expect(grandChild.$selfOrChild().resolve(Dog)).to.be.undefined;
+            expect(child3.$selfOrChild().resolve(Dog)).to.equal(dog);
+            expect(root.$selfOrChild().resolve(Dog)).to.equal(dog);
         });
 
         it("should traverse siblings and self", () => {
@@ -256,10 +256,10 @@ describe("Context", () => {
                   child3     = root.newChild(),
                   grandChild = child3.newChild();
             child3.store(dog);
-            expect(root.$siblingOrSelf().resolve(Dog)).to.be.undefined;
-            expect(grandChild.$siblingOrSelf().resolve(Dog)).to.be.undefined;
-            expect(child3.$siblingOrSelf().resolve(Dog)).to.equal(dog);
-            expect(child2.$siblingOrSelf().resolve(Dog)).to.equal(dog);
+            expect(root.$selfOrSibling().resolve(Dog)).to.be.undefined;
+            expect(grandChild.$selfOrSibling().resolve(Dog)).to.be.undefined;
+            expect(child3.$selfOrSibling().resolve(Dog)).to.equal(dog);
+            expect(child2.$selfOrSibling().resolve(Dog)).to.equal(dog);
         });
 
         it("should traverse ancestors", () => {
@@ -278,8 +278,8 @@ describe("Context", () => {
                   child      = root.newChild(),
                   grandChild = child.newChild();
             root.store(dog);
-            expect(root.$ancestorOrSelf().resolve(Dog)).to.equal(dog);
-            expect(grandChild.$ancestorOrSelf().resolve(Dog)).to.equal(dog);
+            expect(root.$selfOrAncestor().resolve(Dog)).to.equal(dog);
+            expect(grandChild.$selfOrAncestor().resolve(Dog)).to.equal(dog);
         });
 
         it("should traverse descendants", () => {
@@ -304,10 +304,10 @@ describe("Context", () => {
                   child3     = root.newChild(),
                   grandChild = child3.newChild();
             grandChild.store(dog);
-            expect(child2.$descendantOrSelf().resolve(Dog)).to.be.undefined;
-            expect(grandChild.$descendantOrSelf().resolve(Dog)).to.equal(dog);
-            expect(child3.$descendantOrSelf().resolve(Dog)).to.equal(dog);
-            expect(root.$descendantOrSelf().resolve(Dog)).to.equal(dog);
+            expect(child2.$selfOrDescendant().resolve(Dog)).to.be.undefined;
+            expect(grandChild.$selfOrDescendant().resolve(Dog)).to.equal(dog);
+            expect(child3.$selfOrDescendant().resolve(Dog)).to.equal(dog);
+            expect(root.$selfOrDescendant().resolve(Dog)).to.equal(dog);
         });
 
         it("should traverse descendants or |self|", () => {
@@ -318,8 +318,8 @@ describe("Context", () => {
                   child3     = root.newChild(),
                   grandChild = child3.newChild();
             root.store(dog);
-            expect(child2.$descendantOrSelf().resolve(Dog)).to.be.undefined;
-            expect(root.$ancestorSiblingOrSelf().resolve(Dog)).to.equal(dog);
+            expect(child2.$selfOrDescendant().resolve(Dog)).to.be.undefined;
+            expect(root.$selfSiblingOrAncestor().resolve(Dog)).to.equal(dog);
         });
 
         it("should traverse ancestor, |siblings| or self", () => {
@@ -330,8 +330,8 @@ describe("Context", () => {
                   child3     = root.newChild(),
                   grandChild = child3.newChild();
             child2.store(dog);
-            expect(grandChild.$descendantOrSelf().resolve(Dog)).to.be.undefined;
-            expect(child3.$ancestorSiblingOrSelf().resolve(Dog)).to.equal(dog);
+            expect(grandChild.$selfOrDescendant().resolve(Dog)).to.be.undefined;
+            expect(child3.$selfSiblingOrAncestor().resolve(Dog)).to.equal(dog);
         });
 
         it("should traverse |ancestor|, siblings or self", () => {
@@ -342,7 +342,7 @@ describe("Context", () => {
                   child3     = root.newChild(),
                   grandChild = child3.newChild();
             child3.store(dog);
-            expect(grandChild.$ancestorSiblingOrSelf().resolve(Dog)).to.equal(dog);
+            expect(grandChild.$selfSiblingOrAncestor().resolve(Dog)).to.equal(dog);
         });
 
         it("should combine aspect with traversal", () => {
@@ -357,10 +357,10 @@ describe("Context", () => {
             Context.implement({
                 foo() { return this.aspect(null, () => ++count); }
             });
-            expect(child2.$descendantOrSelf().foo().resolve(Dog)).to.be.undefined;
-            expect(grandChild.$descendantOrSelf().foo().resolve(Dog)).to.equal(dog);
-            expect(child3.$descendantOrSelf().foo().resolve(Dog)).to.equal(dog);
-            expect(root.$descendantOrSelf().foo().resolve(Dog)).to.equal(dog);
+            expect(child2.$selfOrDescendant().foo().resolve(Dog)).to.be.undefined;
+            expect(grandChild.$selfOrDescendant().foo().resolve(Dog)).to.equal(dog);
+            expect(child3.$selfOrDescendant().foo().resolve(Dog)).to.equal(dog);
+            expect(root.$selfOrDescendant().foo().resolve(Dog)).to.equal(dog);
             expect(count).to.equal(4);            
         });        
     });

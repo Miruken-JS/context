@@ -350,7 +350,7 @@ _mirukenCallback.CallbackHandler.implement({
         var composer = this;
         var context = ContextualHelper.resolveContext(composer);
         if (context) {
-            composer = context.$descendantOrSelf();
+            composer = context.$selfOrDescendant();
         }
         return composer.$notify();
     },
@@ -358,7 +358,7 @@ _mirukenCallback.CallbackHandler.implement({
         var composer = this;
         var context = ContextualHelper.resolveContext(composer);
         if (context) {
-            composer = context.root.$descendantOrSelf();
+            composer = context.root.$selfOrDescendant();
         }
         return composer.$notify();
     }

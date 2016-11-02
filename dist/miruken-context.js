@@ -398,48 +398,48 @@ Context.implement(axisControl);
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "TraversingAxis/ChildOrSelf:property"}}{{/crossLink}}.
- * @method $childOrSelf
+ * {{#crossLink "TraversingAxis/SelfOrChild:property"}}{{/crossLink}}.
+ * @method $selfOrChild
  * @returns {Context} default traversal axis.
  * @for Context
  */
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "TraversingAxis/SiblingOrSelf:property"}}{{/crossLink}}.
- * @method $siblingOrSelf
+ * {{#crossLink "TraversingAxis/SelfOrSibling:property"}}{{/crossLink}}.
+ * @method $selfOrSibling
  * @returns {Context} default traversal axis.
  * @for Context
  */
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "TraversingAxis/AncestorOrSelf:property"}}{{/crossLink}}.
- * @method $ancestorOrSelf
+ * {{#crossLink "TraversingAxis/SelfOrAncestor:property"}}{{/crossLink}}.
+ * @method $selfOrAncestor
  * @returns {Context} default traversal axis.
  * @for Context
  */        
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "TraversingAxis/DescendantOrSelf:property"}}{{/crossLink}}.
- * @method $descendantOrSelf
+ * {{#crossLink "TraversingAxis/SelfOrDescendant:property"}}{{/crossLink}}.
+ * @method $selfOrDescendant
  * @returns {Context} default traversal axis.
  * @for Context
  */
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "TraversingAxis/DescendantOrSelfReverse:property"}}{{/crossLink}}.
- * @method $descendantOrSelfReverse
+ * {{#crossLink "TraversingAxis/SelfOrDescendantReverse:property"}}{{/crossLink}}.
+ * @method $selfOrDescendantReverse
  * @returns {Context} default traversal axis.
  * @for Context
  */
 
 /**
  * Sets the default traversal axis to
- * {{#crossLink "TraversingAxis/AncestorSiblingOrSelf:property"}}{{/crossLink}}.
- * @method $ancestorSiblingOrSelf
+ * {{#crossLink "TraversingAxis/SelfSiblingOrAncestor:property"}}{{/crossLink}}.
+ * @method $selfSiblingOrAncestor
  * @returns {Context} default traversal axis.
  * @for Context
  */
@@ -635,7 +635,7 @@ CallbackHandler.implement({
         let   composer = this;
         const context  = ContextualHelper.resolveContext(composer);
         if (context) {
-            composer = context.$descendantOrSelf();
+            composer = context.$selfOrDescendant();
         }
         return composer.$notify();
     },
@@ -643,7 +643,7 @@ CallbackHandler.implement({
         let   composer = this;
         const context  = ContextualHelper.resolveContext(composer);
         if (context) {
-            composer = context.root.$descendantOrSelf();
+            composer = context.root.$selfOrDescendant();
         }
         return composer.$notify();
     }

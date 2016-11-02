@@ -12,7 +12,7 @@ CallbackHandler.implement({
         let   composer = this;
         const context  = ContextualHelper.resolveContext(composer);
         if (context) {
-            composer = context.$descendantOrSelf();
+            composer = context.$selfOrDescendant();
         }
         return composer.$notify();
     },
@@ -20,7 +20,7 @@ CallbackHandler.implement({
         let   composer = this;
         const context  = ContextualHelper.resolveContext(composer);
         if (context) {
-            composer = context.root.$descendantOrSelf();
+            composer = context.root.$selfOrDescendant();
         }
         return composer.$notify();
     }

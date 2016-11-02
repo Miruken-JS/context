@@ -347,7 +347,7 @@ define(['exports', 'miruken-core', 'miruken-callback'], function (exports, _miru
             var composer = this;
             var context = ContextualHelper.resolveContext(composer);
             if (context) {
-                composer = context.$descendantOrSelf();
+                composer = context.$selfOrDescendant();
             }
             return composer.$notify();
         },
@@ -355,7 +355,7 @@ define(['exports', 'miruken-core', 'miruken-callback'], function (exports, _miru
             var composer = this;
             var context = ContextualHelper.resolveContext(composer);
             if (context) {
-                composer = context.root.$descendantOrSelf();
+                composer = context.root.$selfOrDescendant();
             }
             return composer.$notify();
         }
