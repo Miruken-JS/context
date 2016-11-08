@@ -6,7 +6,7 @@ import {
 } from "miruken-core";
 
 import {
-    Composition, CompositeCallbackHandler, $provide
+    Composition, CompositeHandler, $provide
 } from "miruken-callback";
 
 const Axis = Symbol();
@@ -74,13 +74,13 @@ export const ContextObserver = Protocol.extend({
  * @class Context
  * @constructor
  * @param  {Context}  [parent]  -  parent context
- * @extends CompositeCallbackHandler
+ * @extends CompositeHandler
  * @uses Parenting
  * @uses Traversing
  * @uses TraversingMixin
  * @uses Disposing
  */    
-export const Context = CompositeCallbackHandler.extend(
+export const Context = CompositeHandler.extend(
     Parenting, Traversing, Disposing, TraversingMixin, {
         constructor(parent) {
             this.base();
@@ -196,7 +196,7 @@ export const Context = CompositeCallbackHandler.extend(
                  * @param   {TraversingAxis}  axis            -  any callback
                  * @param   {Object}          callback        -  any callback
                  * @param   {boolean}         [greedy=false]  -  true if handle greedily
-                 * @param   {CallbackHandler} [composer]      -  composition handler
+                 * @param   {Handler}         [composer]      -  composition handler
                  * @returns {boolean} true if the callback was handled, false otherwise.
                  */                
                 handleAxis(axis, callback, greedy, composer) {

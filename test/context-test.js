@@ -427,7 +427,7 @@ describe("Context", () => {
         });
     });
 
-    describe("CallbackHandler", () => {
+    describe("#publish", () => {
         it("should publish to all descendants", () => {
             let   count     = 0;
             const Observing = Protocol.extend({

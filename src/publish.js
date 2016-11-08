@@ -1,12 +1,12 @@
-import { CallbackHandler } from "miruken-callback";
+import { Handler } from "miruken-callback";
 import { ContextualHelper } from "./helper";
 
-CallbackHandler.implement({
+Handler.implement({
     /**
      * Establishes publish invocation semantics.
      * @method $publish
-     * @returns {CallbackHandler} publish semantics.
-     * @for CallbackHandler
+     * @returns {Handler} publish semantics.
+     * @for Handler
      */
     $publish() {
         let   composer = this;

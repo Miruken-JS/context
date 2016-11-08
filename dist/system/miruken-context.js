@@ -3,7 +3,7 @@
 System.register(['miruken-core', 'miruken-callback'], function (_export, _context) {
     "use strict";
 
-    var Enum, Protocol, Parenting, Disposing, Traversing, TraversingAxis, TraversingMixin, $isSomething, $isNothing, $classOf, $equals, $decorated, assignID, Module, Composition, CompositeCallbackHandler, $provide, CallbackHandler, Axis, ContextState, ContextObserver, Context, axisControl, applyAxis, ContextualHelper, ContextField, ContextualMixin;
+    var Enum, Protocol, Parenting, Disposing, Traversing, TraversingAxis, TraversingMixin, $isSomething, $isNothing, $classOf, $equals, $decorated, assignID, Module, Composition, CompositeHandler, $provide, Handler, Axis, ContextState, ContextObserver, Context, axisControl, applyAxis, ContextualHelper, ContextField, ContextualMixin;
     function contextual(target) {
         target.implement(ContextualMixin);
     }
@@ -28,9 +28,9 @@ System.register(['miruken-core', 'miruken-callback'], function (_export, _contex
             Module = _mirukenCore.Module;
         }, function (_mirukenCallback) {
             Composition = _mirukenCallback.Composition;
-            CompositeCallbackHandler = _mirukenCallback.CompositeCallbackHandler;
+            CompositeHandler = _mirukenCallback.CompositeHandler;
             $provide = _mirukenCallback.$provide;
-            CallbackHandler = _mirukenCallback.CallbackHandler;
+            Handler = _mirukenCallback.Handler;
         }],
         execute: function () {
             if (Function.prototype.newInContext === undefined) Function.prototype.newInContext = function () {
@@ -80,7 +80,7 @@ System.register(['miruken-core', 'miruken-callback'], function (_export, _contex
 
             _export('ContextObserver', ContextObserver);
 
-            _export('Context', Context = CompositeCallbackHandler.extend(Parenting, Traversing, Disposing, TraversingMixin, {
+            _export('Context', Context = CompositeHandler.extend(Parenting, Traversing, Disposing, TraversingMixin, {
                 constructor: function constructor(parent) {
                     this.base();
 
@@ -379,7 +379,7 @@ System.register(['miruken-core', 'miruken-callback'], function (_export, _contex
                 }
             });
 
-            CallbackHandler.implement({
+            Handler.implement({
                 $publish: function $publish() {
                     var composer = this;
                     var context = ContextualHelper.resolveContext(composer);

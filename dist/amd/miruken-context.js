@@ -50,7 +50,7 @@ define(['exports', 'miruken-core', 'miruken-callback'], function (exports, _miru
         childContextEnded: function childContextEnded(context) {}
     });
 
-    var Context = exports.Context = _mirukenCallback.CompositeCallbackHandler.extend(_mirukenCore.Parenting, _mirukenCore.Traversing, _mirukenCore.Disposing, _mirukenCore.TraversingMixin, {
+    var Context = exports.Context = _mirukenCallback.CompositeHandler.extend(_mirukenCore.Parenting, _mirukenCore.Traversing, _mirukenCore.Disposing, _mirukenCore.TraversingMixin, {
         constructor: function constructor(parent) {
             this.base();
 
@@ -342,7 +342,7 @@ define(['exports', 'miruken-core', 'miruken-callback'], function (exports, _miru
         }
     });
 
-    _mirukenCallback.CallbackHandler.implement({
+    _mirukenCallback.Handler.implement({
         $publish: function $publish() {
             var composer = this;
             var context = ContextualHelper.resolveContext(composer);

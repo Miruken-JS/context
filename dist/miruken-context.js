@@ -1,5 +1,5 @@
 import {Enum,Protocol,Parenting,Disposing,Traversing,TraversingAxis,TraversingMixin,$isSomething,$isNothing,$classOf,$equals,$decorated,assignID,Module} from 'miruken-core';
-import {Composition,CompositeCallbackHandler,$provide,CallbackHandler} from 'miruken-callback';
+import {Composition,CompositeHandler,$provide,Handler} from 'miruken-callback';
 
 /**
  * Enhances Functions to create instances in a context.
@@ -100,13 +100,13 @@ export const ContextObserver = Protocol.extend({
  * @class Context
  * @constructor
  * @param  {Context}  [parent]  -  parent context
- * @extends CompositeCallbackHandler
+ * @extends CompositeHandler
  * @uses Parenting
  * @uses Traversing
  * @uses TraversingMixin
  * @uses Disposing
  */    
-export const Context = CompositeCallbackHandler.extend(
+export const Context = CompositeHandler.extend(
     Parenting, Traversing, Disposing, TraversingMixin, {
         constructor(parent) {
             this.base();
@@ -222,7 +222,7 @@ export const Context = CompositeCallbackHandler.extend(
                  * @param   {TraversingAxis}  axis            -  any callback
                  * @param   {Object}          callback        -  any callback
                  * @param   {boolean}         [greedy=false]  -  true if handle greedily
-                 * @param   {CallbackHandler} [composer]      -  composition handler
+                 * @param   {Handler}         [composer]      -  composition handler
                  * @returns {boolean} true if the callback was handled, false otherwise.
                  */                
                 handleAxis(axis, callback, greedy, composer) {
@@ -624,12 +624,12 @@ Context.implement({
     }        
 });
 
-CallbackHandler.implement({
+Handler.implement({
     /**
      * Establishes publish invocation semantics.
      * @method $publish
-     * @returns {CallbackHandler} publish semantics.
-     * @for CallbackHandler
+     * @returns {Handler} publish semantics.
+     * @for Handler
      */
     $publish() {
         let   composer = this;
