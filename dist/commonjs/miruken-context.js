@@ -302,7 +302,7 @@ var ContextualHelper = exports.ContextualHelper = _mirukenCore.Module.extend({
 
 var ContextField = Symbol();
 
-var ContextualMixin = exports.ContextualMixin = Object.freeze({
+var ContextualMixin = exports.ContextualMixin = {
     get context() {
         return this[ContextField];
     },
@@ -314,7 +314,7 @@ var ContextualMixin = exports.ContextualMixin = Object.freeze({
         if (field) this[ContextField].removeHandlers(this);
         if (context) {
             this[ContextField] = context;
-            context.addHandlers(this);
+            context.insertHandlers(0, this);
         } else {
             delete this[ContextField];
         }
@@ -328,7 +328,7 @@ var ContextualMixin = exports.ContextualMixin = Object.freeze({
         var field = this[ContextField];
         if (field) field.end();
     }
-});
+};
 
 Context.implement({
     onEnding: function onEnding(observer) {

@@ -334,7 +334,7 @@ System.register(['miruken-core', 'miruken-callback'], function (_export, _contex
 
             ContextField = Symbol();
 
-            _export('ContextualMixin', ContextualMixin = Object.freeze({
+            _export('ContextualMixin', ContextualMixin = {
                 get context() {
                     return this[ContextField];
                 },
@@ -346,7 +346,7 @@ System.register(['miruken-core', 'miruken-callback'], function (_export, _contex
                     if (field) this[ContextField].removeHandlers(this);
                     if (context) {
                         this[ContextField] = context;
-                        context.addHandlers(this);
+                        context.insertHandlers(0, this);
                     } else {
                         delete this[ContextField];
                     }
@@ -360,7 +360,7 @@ System.register(['miruken-core', 'miruken-callback'], function (_export, _contex
                     var field = this[ContextField];
                     if (field) field.end();
                 }
-            }));
+            });
 
             _export('ContextualMixin', ContextualMixin);
 

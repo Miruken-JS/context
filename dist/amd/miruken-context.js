@@ -299,7 +299,7 @@ define(['exports', 'miruken-core', 'miruken-callback'], function (exports, _miru
 
     var ContextField = Symbol();
 
-    var ContextualMixin = exports.ContextualMixin = Object.freeze({
+    var ContextualMixin = exports.ContextualMixin = {
         get context() {
             return this[ContextField];
         },
@@ -311,7 +311,7 @@ define(['exports', 'miruken-core', 'miruken-callback'], function (exports, _miru
             if (field) this[ContextField].removeHandlers(this);
             if (context) {
                 this[ContextField] = context;
-                context.addHandlers(this);
+                context.insertHandlers(0, this);
             } else {
                 delete this[ContextField];
             }
@@ -325,7 +325,7 @@ define(['exports', 'miruken-core', 'miruken-callback'], function (exports, _miru
             var field = this[ContextField];
             if (field) field.end();
         }
-    });
+    };
 
     Context.implement({
         onEnding: function onEnding(observer) {

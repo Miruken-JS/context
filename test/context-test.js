@@ -1,5 +1,5 @@
 import {
-    True, Base, Protocol, $using
+    True, Base, Protocol, Disposing, $using
 } from "miruken-core";
 
 import { Context, ContextState } from "../src/context";
@@ -454,22 +454,7 @@ describe("Context", () => {
 });
 
 describe("Contextual", () => {
-    const Shutdown = Base.extend({
-        constructor(methodName, args) {
-            let _vetos = [];
-            this.extend({
-                getVetos() { 
-                    return _vetos.slice(0); 
-                },
-                veto(reason) {
-                    _vetos.puh(reason);
-                }
-            });
-        }
-    });
-    
     const Controller = Base.extend(contextual, {
-        shutdown(shutdown) {}
     });
 
     describe("#setContext", () => {
