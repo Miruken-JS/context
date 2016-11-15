@@ -1,8 +1,10 @@
-var isparta = require('isparta');
-var paths = require('./build/paths');
+var isparta         = require('isparta');
+var paths           = require('./build/paths');
 var compilerOptions = require('./build/babel-options');
 
 module.exports = function(config) {
+    var babelOptions = compilerOptions.system();
+    babelOptions.sourceMap = false;
     config.set({
         // base path that will be used to resolve all patterns (eg. files, exclude)
         basePath: '',
@@ -17,18 +19,12 @@ module.exports = function(config) {
         files: [],
         
         preprocessors: {
-            [paths.tests]: ['babel'],
+            [paths.tests]:  ['babel'],
             [paths.source]: ['babel']
         },
 
         babelPreprocessor: {
-            options: {
-                sourceMap: 'inline',
-                presets: [ 'es2015'],
-                plugins: [
-                    'transform-decorators-legacy'
-                ]
-            }
+            options: babelOptions
         },
 
         reporters: ['coverage', 'progress'],

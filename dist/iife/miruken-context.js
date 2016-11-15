@@ -1,4 +1,5 @@
-define(['exports', 'miruken-core', 'miruken-callback'], function (exports, mirukenCore, mirukenCallback) { 'use strict';
+(function (exports,mirukenCore,mirukenCallback) {
+'use strict';
 
 var Axis = Symbol();
 
@@ -364,6 +365,4 @@ exports.contextual = contextual;
 exports.ContextualHelper = ContextualHelper$1;
 exports.ContextualMixin = ContextualMixin;
 
-Object.defineProperty(exports, '__esModule', { value: true });
-
-});
+}((this.miruken-context = this.miruken-context || {}),mirukenCore,mirukenCallback));

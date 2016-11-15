@@ -1,44 +1,13 @@
 'use strict';
 
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.ContextualMixin = exports.ContextualHelper = exports.Context = exports.ContextObserver = exports.ContextState = undefined;
-exports.contextual = contextual;
+Object.defineProperty(exports, '__esModule', { value: true });
 
-var _mirukenCore = require('miruken-core');
-
-var _mirukenCallback = require('miruken-callback');
-
-if (Function.prototype.newInContext === undefined) Function.prototype.newInContext = function () {
-    var args = Array.prototype.slice.call(arguments),
-        context = args.shift(),
-        constructor = this;
-    function Fake() {
-        constructor.apply(this, args);
-    }
-    Fake.prototype = constructor.prototype;
-    var object = new Fake();
-    ContextualHelper.bindContext(object, context);
-    return object;
-};
-
-if (Function.prototype.newInChildContext === undefined) Function.prototype.newInChildContext = function () {
-    var args = Array.prototype.slice.call(arguments),
-        context = args.shift(),
-        constructor = this;
-    function Fake() {
-        constructor.apply(this, args);
-    }
-    Fake.prototype = constructor.prototype;
-    var object = new Fake();
-    ContextualHelper.bindChildContext(context, object);
-    return object;
-};
+var mirukenCore = require('miruken-core');
+var mirukenCallback = require('miruken-callback');
 
 var Axis = Symbol();
 
-var ContextState = exports.ContextState = (0, _mirukenCore.Enum)({
+var ContextState$1 = mirukenCore.Enum({
     Active: 1,
 
     Ending: 2,
@@ -46,21 +15,21 @@ var ContextState = exports.ContextState = (0, _mirukenCore.Enum)({
     Ended: 3
 });
 
-var ContextObserver = exports.ContextObserver = _mirukenCore.Protocol.extend({
+var ContextObserver = mirukenCore.Protocol.extend({
     contextEnding: function contextEnding(context) {},
     contextEnded: function contextEnded(context) {},
     childContextEnding: function childContextEnding(childContext) {},
     childContextEnded: function childContextEnded(context) {}
 });
 
-var Context = exports.Context = _mirukenCallback.CompositeHandler.extend(_mirukenCore.Parenting, _mirukenCore.Traversing, _mirukenCore.Disposing, _mirukenCore.TraversingMixin, {
+var Context = mirukenCallback.CompositeHandler.extend(mirukenCore.Parenting, mirukenCore.Traversing, mirukenCore.Disposing, mirukenCore.TraversingMixin, {
     constructor: function constructor(parent) {
         this.base();
 
-        var _id = (0, _mirukenCore.assignID)(this),
+        var _id = mirukenCore.assignID(this),
             _parent = parent;
 
-        var _state = ContextState.Active,
+        var _state = ContextState$1.Active,
             _children = [],
             _observers = void 0;
 
@@ -95,7 +64,7 @@ var Context = exports.Context = _mirukenCallback.CompositeHandler.extend(_miruke
             },
             newChild: function newChild() {
                 ensureActive();
-                var childContext = new ((0, _mirukenCore.$classOf)(this))(this).extend({
+                var childContext = new (mirukenCore.$classOf(this))(this).extend({
                     end: function end() {
                         var index = _children.indexOf(childContext);
                         if (index < 0) return;
@@ -110,8 +79,8 @@ var Context = exports.Context = _mirukenCallback.CompositeHandler.extend(_miruke
                 return childContext;
             },
             store: function store(object) {
-                if ((0, _mirukenCore.$isSomething)(object)) {
-                    (0, _mirukenCallback.$provide)(this, object);
+                if (mirukenCore.$isSomething(object)) {
+                    mirukenCallback.$provide(this, object);
                 }
                 return this;
             },
@@ -131,18 +100,18 @@ var Context = exports.Context = _mirukenCallback.CompositeHandler.extend(_miruke
                     return !!handled;
                 }
                 delete this[Axis];
-                if (axis === _mirukenCore.TraversingAxis.Self) {
+                if (axis === mirukenCore.TraversingAxis.Self) {
                     return this.base(callback, greedy, composer);
                 } else {
                     this.traverse(axis, function (node) {
-                        handled = handled | ((0, _mirukenCore.$equals)(node, _this) ? _this.base(callback, greedy, composer) : node.handleAxis(_mirukenCore.TraversingAxis.Self, callback, greedy, composer));
+                        handled = handled | (mirukenCore.$equals(node, _this) ? _this.base(callback, greedy, composer) : node.handleAxis(mirukenCore.TraversingAxis.Self, callback, greedy, composer));
                         return handled && !greedy;
                     }, this);
                 }
                 return !!handled;
             },
             handleAxis: function handleAxis(axis, callback, greedy, composer) {
-                if (!(axis instanceof _mirukenCore.TraversingAxis)) {
+                if (!(axis instanceof mirukenCore.TraversingAxis)) {
                     throw new TypeError("Invalid axis type supplied");
                 }
                 this[Axis] = axis;
@@ -150,7 +119,7 @@ var Context = exports.Context = _mirukenCallback.CompositeHandler.extend(_miruke
             },
             observe: function observe(observer) {
                 ensureActive();
-                if ((0, _mirukenCore.$isNothing)(observer)) return;
+                if (mirukenCore.$isNothing(observer)) return;
                 (_observers || (_observers = [])).push(observer);
                 return function () {
                     var index = _observers.indexOf(observer);
@@ -200,12 +169,12 @@ var Context = exports.Context = _mirukenCallback.CompositeHandler.extend(_miruke
                 return this;
             },
             end: function end() {
-                if (_state == ContextState.Active) {
+                if (_state == ContextState$1.Active) {
                     var notifier = makeNotifier();
-                    _state = ContextState.Ending;
+                    _state = ContextState$1.Ending;
                     notifier.contextEnding(this);
                     this.unwind();
-                    _state = ContextState.Ended;
+                    _state = ContextState$1.Ended;
                     notifier.contextEnded(this);
                     _observers = null;
                 }
@@ -216,7 +185,7 @@ var Context = exports.Context = _mirukenCallback.CompositeHandler.extend(_miruke
         });
 
         function ensureActive() {
-            if (_state != ContextState.Active) {
+            if (_state != ContextState$1.Active) {
                 throw new Error("The context has already ended.");
             }
         }
@@ -231,20 +200,19 @@ var axisControl = {
     axis: function axis(_axis) {
         return this.decorate({
             handleCallback: function handleCallback(callback, greedy, composer) {
-                if (!(callback instanceof _mirukenCallback.Composition)) {
+                if (!(callback instanceof mirukenCallback.Composition)) {
                     this[Axis] = _axis;
                 }
                 return this.base(callback, greedy, composer);
             },
             equals: function equals(other) {
-                return this === other || (0, _mirukenCore.$decorated)(this) === (0, _mirukenCore.$decorated)(other);
+                return this === other || mirukenCore.$decorated(this) === mirukenCore.$decorated(other);
             }
         });
     }
-},
-    applyAxis = axisControl.axis;
+};
 
-_mirukenCore.TraversingAxis.items.forEach(function (axis) {
+mirukenCore.TraversingAxis.items.forEach(function (axis) {
     var key = "$" + axis.name.charAt(0).toLowerCase() + axis.name.slice(1);
     axisControl[key] = function () {
         return this.axis(axis);
@@ -253,56 +221,9 @@ _mirukenCore.TraversingAxis.items.forEach(function (axis) {
 
 Context.implement(axisControl);
 
-var ContextualHelper = exports.ContextualHelper = _mirukenCore.Module.extend({
-    resolveContext: function resolveContext(contextual) {
-        return (0, _mirukenCore.$isNothing)(contextual) || contextual instanceof Context ? contextual : contextual.context;
-    },
-    requireContext: function requireContext(contextual) {
-        var context = ContextualHelper.resolveContext(contextual);
-        if (!(context instanceof Context)) throw new Error("The supplied object is not a Context or Contextual object.");
-        return context;
-    },
-    clearContext: function clearContext(contextual) {
-        var context = contextual.context;
-        if (context) {
-            try {
-                context.end();
-            } finally {
-                contextual.context = null;
-            }
-        }
-    },
-    bindContext: function bindContext(contextual, context, replace) {
-        if (contextual && (replace || !contextual.context)) {
-            contextual.context = ContextualHelper.resolveContext(context);
-        }
-        return contextual;
-    },
-    bindChildContext: function bindChildContext(contextual, child, replace) {
-        var childContext = void 0;
-        if (child) {
-            if (!replace) {
-                childContext = child.context;
-                if (childContext && childContext.state === ContextState.Active) {
-                    return childContext;
-                }
-            }
-            var context = ContextualHelper.requireContext(contextual);
-            while (context && context.state !== ContextState.Active) {
-                context = context.parent;
-            }
-            if (context) {
-                childContext = context.newChild();
-                ContextualHelper.bindContext(child, childContext, true);
-            }
-        }
-        return childContext;
-    }
-});
-
 var ContextField = Symbol();
 
-var ContextualMixin = exports.ContextualMixin = Object.freeze({
+var ContextualMixin = Object.freeze({
     get context() {
         return this[ContextField];
     },
@@ -322,11 +243,88 @@ var ContextualMixin = exports.ContextualMixin = Object.freeze({
 
     get isActiveContext() {
         var field = this[ContextField];
-        return field && field.state === ContextState.Active;
+        return field && field.state === ContextState$1.Active;
     },
     endContext: function endContext() {
         var field = this[ContextField];
         if (field) field.end();
+    }
+});
+
+function contextual(target) {
+  target.implement(ContextualMixin);
+}
+
+if (Function.prototype.newInContext === undefined) Function.prototype.newInContext = function () {
+    var args = Array.prototype.slice.call(arguments),
+        context = args.shift(),
+        constructor = this;
+    function Fake() {
+        constructor.apply(this, args);
+    }
+    Fake.prototype = constructor.prototype;
+    var object = new Fake();
+    ContextualHelper.bindContext(object, context);
+    return object;
+};
+
+if (Function.prototype.newInChildContext === undefined) Function.prototype.newInChildContext = function () {
+    var args = Array.prototype.slice.call(arguments),
+        context = args.shift(),
+        constructor = this;
+    function Fake() {
+        constructor.apply(this, args);
+    }
+    Fake.prototype = constructor.prototype;
+    var object = new Fake();
+    ContextualHelper.bindChildContext(context, object);
+    return object;
+};
+
+var ContextualHelper$1 = mirukenCore.Module.extend({
+    resolveContext: function resolveContext(contextual) {
+        return mirukenCore.$isNothing(contextual) || contextual instanceof Context ? contextual : contextual.context;
+    },
+    requireContext: function requireContext(contextual) {
+        var context = ContextualHelper$1.resolveContext(contextual);
+        if (!(context instanceof Context)) throw new Error("The supplied object is not a Context or Contextual object.");
+        return context;
+    },
+    clearContext: function clearContext(contextual) {
+        var context = contextual.context;
+        if (context) {
+            try {
+                context.end();
+            } finally {
+                contextual.context = null;
+            }
+        }
+    },
+    bindContext: function bindContext(contextual, context, replace) {
+        if (contextual && (replace || !contextual.context)) {
+            contextual.context = ContextualHelper$1.resolveContext(context);
+        }
+        return contextual;
+    },
+    bindChildContext: function bindChildContext(contextual, child, replace) {
+        var childContext = void 0;
+        if (child) {
+            if (!replace) {
+                childContext = child.context;
+                if (childContext && childContext.state === ContextState.Active) {
+                    return childContext;
+                }
+            }
+            var context = ContextualHelper$1.requireContext(contextual);
+            while (context && context.state !== ContextState.Active) {
+                context = context.parent;
+            }
+            if (context) {
+                childContext = context.newChild();
+                ContextualHelper$1.bindContext(child, childContext, true);
+            }
+        }
+        return childContext;
     }
 });
 
@@ -345,10 +343,10 @@ Context.implement({
     }
 });
 
-_mirukenCallback.Handler.implement({
+mirukenCallback.Handler.implement({
     $publish: function $publish() {
         var composer = this;
-        var context = ContextualHelper.resolveContext(composer);
+        var context = ContextualHelper$1.resolveContext(composer);
         if (context) {
             composer = context.$selfOrDescendant();
         }
@@ -356,7 +354,7 @@ _mirukenCallback.Handler.implement({
     },
     $publishFromRoot: function $publishFromRoot() {
         var composer = this;
-        var context = ContextualHelper.resolveContext(composer);
+        var context = ContextualHelper$1.resolveContext(composer);
         if (context) {
             composer = context.root.$selfOrDescendant();
         }
@@ -364,6 +362,9 @@ _mirukenCallback.Handler.implement({
     }
 });
 
-function contextual(target) {
-    target.implement(ContextualMixin);
-}
+exports.ContextState = ContextState$1;
+exports.ContextObserver = ContextObserver;
+exports.Context = Context;
+exports.contextual = contextual;
+exports.ContextualHelper = ContextualHelper$1;
+exports.ContextualMixin = ContextualMixin;
