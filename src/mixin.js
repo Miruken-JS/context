@@ -9,7 +9,7 @@ const ContextField = Symbol();
  * @class ContextualMixin
  * @private
  */
-export const ContextualMixin = Object.freeze({
+export const ContextualMixin = {
     /**
      * The context associated with the receiver.
      * @property {Context} context
@@ -24,7 +24,7 @@ export const ContextualMixin = Object.freeze({
             this[ContextField].removeHandlers(this);
         if (context) {
             this[ContextField] = context;
-            context.addHandlers(this);
+            context.insertHandlers(0, this);
         } else {
             delete this[ContextField];
         }
@@ -46,4 +46,4 @@ export const ContextualMixin = Object.freeze({
         const field = this[ContextField];        
         if (field) field.end();
     }
-});
+};

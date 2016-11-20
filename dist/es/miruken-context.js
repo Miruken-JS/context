@@ -219,7 +219,7 @@ Context.implement(axisControl);
 
 var ContextField = Symbol();
 
-var ContextualMixin = Object.freeze({
+var ContextualMixin = {
     get context() {
         return this[ContextField];
     },
@@ -231,7 +231,7 @@ var ContextualMixin = Object.freeze({
         if (field) this[ContextField].removeHandlers(this);
         if (context) {
             this[ContextField] = context;
-            context.addHandlers(this);
+            context.insertHandlers(0, this);
         } else {
             delete this[ContextField];
         }
@@ -245,7 +245,7 @@ var ContextualMixin = Object.freeze({
         var field = this[ContextField];
         if (field) field.end();
     }
-});
+};
 
 function contextual(target) {
   target.implement(ContextualMixin);

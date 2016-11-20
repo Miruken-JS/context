@@ -5,6 +5,7 @@ System.config({
     "github:*": "jspm_packages/github/*",
     "npm:*": "jspm_packages/npm/*"
   },
+
   map: {
     "babel": "npm:babel@6.5.2",
     "babel-core": "npm:babel-core@6.16.0",
@@ -273,6 +274,9 @@ System.config({
     "npm:minimatch@3.0.3": {
       "brace-expansion": "npm:brace-expansion@1.1.6",
       "path": "github:jspm/nodelibs-path@0.1.0"
+    },
+    "npm:miruken-callback@0.0.1": {
+      "miruken-core": "npm:miruken-core@0.0.1"
     },
     "npm:miruken-core@0.0.1": {
       "reflect-metadata": "npm:reflect-metadata@0.1.8"

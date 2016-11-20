@@ -169,9 +169,7 @@ export const Context = CompositeHandler.extend(
                         axis    = this[Axis];
                     if (!axis) {
                         handled = this.base(callback, greedy, composer);
-                        if (handled && !greedy) {
-                            return true;
-                        }
+                        if (handled && !greedy) { return true; }
                         if (_parent) {
                             handled = handled | _parent.handle(callback, greedy, composer);
                         }
