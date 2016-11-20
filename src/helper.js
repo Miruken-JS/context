@@ -1,5 +1,5 @@
 import { Module, $isNothing } from "miruken-core";
-import { Context } from "./context";
+import { ContextState, Context } from "./context";
 
 /**
  * Mixin for {{#crossLink "Contextual"}}{{/crossLink}} helper support.
