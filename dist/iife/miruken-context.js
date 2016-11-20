@@ -3,7 +3,7 @@
 
 var Axis = Symbol();
 
-var ContextState$1 = mirukenCore.Enum({
+var ContextState = mirukenCore.Enum({
     Active: 1,
 
     Ending: 2,
@@ -25,7 +25,7 @@ var Context = mirukenCallback.CompositeHandler.extend(mirukenCore.Parenting, mir
         var _id = mirukenCore.assignID(this),
             _parent = parent;
 
-        var _state = ContextState$1.Active,
+        var _state = ContextState.Active,
             _children = [],
             _observers = void 0;
 
@@ -165,12 +165,12 @@ var Context = mirukenCallback.CompositeHandler.extend(mirukenCore.Parenting, mir
                 return this;
             },
             end: function end() {
-                if (_state == ContextState$1.Active) {
+                if (_state == ContextState.Active) {
                     var notifier = makeNotifier();
-                    _state = ContextState$1.Ending;
+                    _state = ContextState.Ending;
                     notifier.contextEnding(this);
                     this.unwind();
-                    _state = ContextState$1.Ended;
+                    _state = ContextState.Ended;
                     notifier.contextEnded(this);
                     _observers = null;
                 }
@@ -181,7 +181,7 @@ var Context = mirukenCallback.CompositeHandler.extend(mirukenCore.Parenting, mir
         });
 
         function ensureActive() {
-            if (_state != ContextState$1.Active) {
+            if (_state != ContextState.Active) {
                 throw new Error("The context has already ended.");
             }
         }
@@ -239,7 +239,7 @@ var ContextualMixin = {
 
     get isActiveContext() {
         var field = this[ContextField];
-        return field && field.state === ContextState$1.Active;
+        return field && field.state === ContextState.Active;
     },
     endContext: function endContext() {
         var field = this[ContextField];
@@ -358,7 +358,7 @@ mirukenCallback.Handler.implement({
     }
 });
 
-exports.ContextState = ContextState$1;
+exports.ContextState = ContextState;
 exports.ContextObserver = ContextObserver;
 exports.Context = Context;
 exports.contextual = contextual;

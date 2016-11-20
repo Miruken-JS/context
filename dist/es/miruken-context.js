@@ -3,7 +3,7 @@ import { $provide, CompositeHandler, Composition, Handler } from 'miruken-callba
 
 var Axis = Symbol();
 
-var ContextState$1 = Enum({
+var ContextState = Enum({
     Active: 1,
 
     Ending: 2,
@@ -25,7 +25,7 @@ var Context = CompositeHandler.extend(Parenting, Traversing, Disposing, Traversi
         var _id = assignID(this),
             _parent = parent;
 
-        var _state = ContextState$1.Active,
+        var _state = ContextState.Active,
             _children = [],
             _observers = void 0;
 
@@ -165,12 +165,12 @@ var Context = CompositeHandler.extend(Parenting, Traversing, Disposing, Traversi
                 return this;
             },
             end: function end() {
-                if (_state == ContextState$1.Active) {
+                if (_state == ContextState.Active) {
                     var notifier = makeNotifier();
-                    _state = ContextState$1.Ending;
+                    _state = ContextState.Ending;
                     notifier.contextEnding(this);
                     this.unwind();
-                    _state = ContextState$1.Ended;
+                    _state = ContextState.Ended;
                     notifier.contextEnded(this);
                     _observers = null;
                 }
@@ -181,7 +181,7 @@ var Context = CompositeHandler.extend(Parenting, Traversing, Disposing, Traversi
         });
 
         function ensureActive() {
-            if (_state != ContextState$1.Active) {
+            if (_state != ContextState.Active) {
                 throw new Error("The context has already ended.");
             }
         }
@@ -239,7 +239,7 @@ var ContextualMixin = {
 
     get isActiveContext() {
         var field = this[ContextField];
-        return field && field.state === ContextState$1.Active;
+        return field && field.state === ContextState.Active;
     },
     endContext: function endContext() {
         var field = this[ContextField];
@@ -358,4 +358,4 @@ Handler.implement({
     }
 });
 
-export { ContextState$1 as ContextState, ContextObserver, Context, contextual, ContextualHelper$1 as ContextualHelper, ContextualMixin };
+export { ContextState, ContextObserver, Context, contextual, ContextualHelper$1 as ContextualHelper, ContextualMixin };
