@@ -365,4 +365,4 @@ exports.contextual = contextual;
 exports.ContextualHelper = ContextualHelper$1;
 exports.ContextualMixin = ContextualMixin;
 
-}((this.miruken-context = this.miruken-context || {}),mirukenCore,mirukenCallback));
+}((this.mirukenContext = this.mirukenContext || {}),mirukenCore,mirukenCallback));
