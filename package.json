@@ -1,6 +1,6 @@
 {
   "name": "miruken-context",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "registry": "npm",
   "description": "Provides contextual support",
   "keywords": [
