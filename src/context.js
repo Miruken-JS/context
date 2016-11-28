@@ -279,7 +279,14 @@ export const Context = CompositeHandler.extend(
             function makeNotifier() {
                 return new ContextObserver(_observers && _observers.slice());
             }
-        }
+        },
+        resolveContext(resolution) {
+            const decoratee = this.decoratee;
+            return decoratee ? decoratee.resolve(resolution.key) : this;
+        }        
+});
+$provide(Context, Context, function (resolution) {
+    return this.resolveContext(resolution);
 });
 
 const axisControl = {
