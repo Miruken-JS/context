@@ -189,7 +189,14 @@ var Context = CompositeHandler.extend(Parenting, Traversing, Disposing, Traversi
         function makeNotifier() {
             return new ContextObserver(_observers && _observers.slice());
         }
+    },
+    resolveContext: function resolveContext(resolution) {
+        var decoratee = this.decoratee;
+        return decoratee ? decoratee.resolve(resolution.key) : this;
     }
+});
+$provide(Context, Context, function (resolution) {
+    return this.resolveContext(resolution);
 });
 
 var axisControl = {
