@@ -1,5 +1,6 @@
 import {
-    True, Base, Protocol, Disposing, $using
+    True, Base, Protocol, Disposing,
+    $using, $decorate
 } from "miruken-core";
 
 import { Context, ContextState } from "../src/context";
@@ -503,4 +504,19 @@ describe("Contextual", () => {
             expect(controller.isActiveContext).to.be.false;
         });
     });
+
+    describe("#resolveContext", () => {
+        it("should be resolve self", () => {
+            const context = new Context();
+            expect(context).to.equal(context.resolve(Context));
+        });
+
+        it("should be resolve decorated self", () => {
+            const context = new Context(),
+                  ctx     = $decorate(context, {
+                               hello() {}
+                            });
+            expect(context).to.equal(ctx.resolve(Context));
+        });        
+    });    
 });

@@ -194,7 +194,7 @@ var Context$1 = mirukenCallback.CompositeHandler.extend(mirukenCore.Parenting, m
         return decoratee ? decoratee.resolve(resolution.key) : this;
     }
 });
-mirukenCallback.$provide(Context$1, Context$1, function (resolution) {
+mirukenCallback.$provide(Context$1.prototype, Context$1, function (resolution) {
     return this.resolveContext(resolution);
 });
 

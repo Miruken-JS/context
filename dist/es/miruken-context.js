@@ -195,7 +195,7 @@ var Context$1 = CompositeHandler.extend(Parenting, Traversing, Disposing, Traver
         return decoratee ? decoratee.resolve(resolution.key) : this;
     }
 });
-$provide(Context$1, Context$1, function (resolution) {
+$provide(Context$1.prototype, Context$1, function (resolution) {
     return this.resolveContext(resolution);
 });
 

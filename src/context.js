@@ -285,7 +285,7 @@ export const Context = CompositeHandler.extend(
             return decoratee ? decoratee.resolve(resolution.key) : this;
         }        
 });
-$provide(Context, Context, function (resolution) {
+$provide(Context.prototype, Context, function (resolution) {
     return this.resolveContext(resolution);
 });
 
