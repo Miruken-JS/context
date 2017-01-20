@@ -18,7 +18,7 @@ var ContextObserver = mirukenCore.Protocol.extend({
     childContextEnded: function childContextEnded(context) {}
 });
 
-var Context = mirukenCallback.CompositeHandler.extend(mirukenCore.Parenting, mirukenCore.Traversing, mirukenCore.Disposing, mirukenCore.TraversingMixin, {
+var Context$1 = mirukenCallback.CompositeHandler.extend(mirukenCore.Parenting, mirukenCore.Traversing, mirukenCore.Disposing, mirukenCore.TraversingMixin, {
     constructor: function constructor(parent) {
         this.base();
 
@@ -195,7 +195,7 @@ var Context = mirukenCallback.CompositeHandler.extend(mirukenCore.Parenting, mir
         return decoratee ? decoratee.resolve(resolution.key) : this;
     }
 });
-mirukenCallback.$provide(Context, Context, function (resolution) {
+mirukenCallback.$provide(Context$1, Context$1, function (resolution) {
     return this.resolveContext(resolution);
 });
 
@@ -222,7 +222,7 @@ mirukenCore.TraversingAxis.items.forEach(function (axis) {
     };
 });
 
-Context.implement(axisControl);
+Context$1.implement(axisControl);
 
 var ContextField = Symbol();
 
@@ -235,7 +235,9 @@ var ContextualMixin = {
         if (field === context) {
             return;
         }
-        if (field) this[ContextField].removeHandlers(this);
+        if (field) {
+            field.removeHandlers(this);
+        }
         if (context) {
             this[ContextField] = context;
             context.insertHandlers(0, this);
@@ -247,6 +249,16 @@ var ContextualMixin = {
     get isActiveContext() {
         var field = this[ContextField];
         return field && field.state === ContextState.Active;
+    },
+    endCallingContext: function endCallingContext() {
+        var composer = mirukenCallback.$composer;
+        if (!composer) {
+            return;
+        }
+        var context = composer.resolve(Context);
+        if (context && context !== this.context) {
+            context.End();
+        }
     },
     endContext: function endContext() {
         var field = this[ContextField];
@@ -286,11 +298,11 @@ if (Function.prototype.newInChildContext === undefined) Function.prototype.newIn
 
 var ContextualHelper$1 = mirukenCore.Module.extend({
     resolveContext: function resolveContext(contextual) {
-        return mirukenCore.$isNothing(contextual) || contextual instanceof Context ? contextual : contextual.context;
+        return mirukenCore.$isNothing(contextual) || contextual instanceof Context$1 ? contextual : contextual.context;
     },
     requireContext: function requireContext(contextual) {
         var context = ContextualHelper$1.resolveContext(contextual);
-        if (!(context instanceof Context)) throw new Error("The supplied object is not a Context or Contextual object.");
+        if (!(context instanceof Context$1)) throw new Error("The supplied object is not a Context or Contextual object.");
         return context;
     },
     clearContext: function clearContext(contextual) {
@@ -331,7 +343,7 @@ var ContextualHelper$1 = mirukenCore.Module.extend({
     }
 });
 
-Context.implement({
+Context$1.implement({
     onEnding: function onEnding(observer) {
         return this.observe({ contextEnding: observer });
     },
@@ -367,7 +379,7 @@ mirukenCallback.Handler.implement({
 
 exports.ContextState = ContextState;
 exports.ContextObserver = ContextObserver;
-exports.Context = Context;
+exports.Context = Context$1;
 exports.contextual = contextual;
 exports.ContextualHelper = ContextualHelper$1;
 exports.ContextualMixin = ContextualMixin;

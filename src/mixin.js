@@ -1,4 +1,5 @@
 import { ContextState } from "./context";
+import { $composer } from "miruken-callback";
 
 const ContextField = Symbol();
 
@@ -17,11 +18,10 @@ export const ContextualMixin = {
     get context() { return this[ContextField]; },
     set context(context) {
         const field = this[ContextField];
-        if (field === context) {
-            return;
+        if (field === context) { return; }
+        if (field) {
+            field.removeHandlers(this);
         }
-        if (field)
-            this[ContextField].removeHandlers(this);
         if (context) {
             this[ContextField] = context;
             context.insertHandlers(0, this);
@@ -38,6 +38,18 @@ export const ContextualMixin = {
         const field = this[ContextField];
         return field && (field.state === ContextState.Active);
     },
+    /**
+     * Ends the callers context.
+     * @method endCallingContext
+     */
+    endCallingContext() {
+        const composer = $composer;
+        if (!composer) { return; }
+        const context = composer.resolve(Context);
+        if (context && (context !== this.context)) {
+            context.End();
+        }
+    },    
     /**
      * Ends the receivers context.
      * @method endContext

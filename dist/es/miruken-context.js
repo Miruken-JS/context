@@ -1,5 +1,5 @@
 import { $classOf, $decorated, $equals, $isNothing, $isSomething, Disposing, Enum, Module, Parenting, Protocol, Traversing, TraversingAxis, TraversingMixin, assignID } from 'miruken-core';
-import { $provide, CompositeHandler, Composition, Handler } from 'miruken-callback';
+import { $composer, $provide, CompositeHandler, Composition, Handler } from 'miruken-callback';
 
 var Axis = Symbol();
 
@@ -18,7 +18,7 @@ var ContextObserver = Protocol.extend({
     childContextEnded: function childContextEnded(context) {}
 });
 
-var Context = CompositeHandler.extend(Parenting, Traversing, Disposing, TraversingMixin, {
+var Context$1 = CompositeHandler.extend(Parenting, Traversing, Disposing, TraversingMixin, {
     constructor: function constructor(parent) {
         this.base();
 
@@ -195,7 +195,7 @@ var Context = CompositeHandler.extend(Parenting, Traversing, Disposing, Traversi
         return decoratee ? decoratee.resolve(resolution.key) : this;
     }
 });
-$provide(Context, Context, function (resolution) {
+$provide(Context$1, Context$1, function (resolution) {
     return this.resolveContext(resolution);
 });
 
@@ -222,7 +222,7 @@ TraversingAxis.items.forEach(function (axis) {
     };
 });
 
-Context.implement(axisControl);
+Context$1.implement(axisControl);
 
 var ContextField = Symbol();
 
@@ -235,7 +235,9 @@ var ContextualMixin = {
         if (field === context) {
             return;
         }
-        if (field) this[ContextField].removeHandlers(this);
+        if (field) {
+            field.removeHandlers(this);
+        }
         if (context) {
             this[ContextField] = context;
             context.insertHandlers(0, this);
@@ -247,6 +249,16 @@ var ContextualMixin = {
     get isActiveContext() {
         var field = this[ContextField];
         return field && field.state === ContextState.Active;
+    },
+    endCallingContext: function endCallingContext() {
+        var composer = $composer;
+        if (!composer) {
+            return;
+        }
+        var context = composer.resolve(Context);
+        if (context && context !== this.context) {
+            context.End();
+        }
     },
     endContext: function endContext() {
         var field = this[ContextField];
@@ -286,11 +298,11 @@ if (Function.prototype.newInChildContext === undefined) Function.prototype.newIn
 
 var ContextualHelper$1 = Module.extend({
     resolveContext: function resolveContext(contextual) {
-        return $isNothing(contextual) || contextual instanceof Context ? contextual : contextual.context;
+        return $isNothing(contextual) || contextual instanceof Context$1 ? contextual : contextual.context;
     },
     requireContext: function requireContext(contextual) {
         var context = ContextualHelper$1.resolveContext(contextual);
-        if (!(context instanceof Context)) throw new Error("The supplied object is not a Context or Contextual object.");
+        if (!(context instanceof Context$1)) throw new Error("The supplied object is not a Context or Contextual object.");
         return context;
     },
     clearContext: function clearContext(contextual) {
@@ -331,7 +343,7 @@ var ContextualHelper$1 = Module.extend({
     }
 });
 
-Context.implement({
+Context$1.implement({
     onEnding: function onEnding(observer) {
         return this.observe({ contextEnding: observer });
     },
@@ -365,4 +377,4 @@ Handler.implement({
     }
 });
 
-export { ContextState, ContextObserver, Context, contextual, ContextualHelper$1 as ContextualHelper, ContextualMixin };
+export { ContextState, ContextObserver, Context$1 as Context, contextual, ContextualHelper$1 as ContextualHelper, ContextualMixin };
