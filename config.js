@@ -58,7 +58,7 @@ System.config({
       "miruken-core": "npm:miruken-core@0.0.3"
     },
     "npm:miruken-core@0.0.3": {
-      "reflect-metadata": "npm:reflect-metadata@0.1.9"
+      "reflect-metadata": "npm:reflect-metadata@0.1.12"
     },
     "npm:process@0.11.9": {
       "assert": "github:jspm/nodelibs-assert@0.1.0",
