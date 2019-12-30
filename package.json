@@ -22,8 +22,8 @@
       "dist": "dist/amd"
     },
     "dependencies": {
-      "miruken-callback": "0.0",
-      "miruken-core": "0.0"
+      "miruken-callback": "0.0.5-alpha.20",
+      "miruken-core": "0.0.5-alpha.1"
     },
     "devDependencies": {
       "chai": "^3.5.0"
