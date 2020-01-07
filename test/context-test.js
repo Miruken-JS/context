@@ -1,7 +1,11 @@
 import {
     True, Base, Protocol, Disposing,
-    $using, $decorate
+    $using, $decorate, Resolving
 } from "miruken-core";
+
+import {
+    Handler
+} from "miruken-callback"
 
 import { Context, ContextState } from "../src/context";
 import { contextual } from "../src/contextual";
@@ -519,4 +523,43 @@ describe("Contextual", () => {
             expect(context).to.equal(ctx.resolve(Context));
         });        
     });    
+
+    describe("$composer with resolving protocols", () => {
+        const Foo = Protocol.extend(Resolving, {
+            doFoo() { }
+        });
+        
+        const Bar = Protocol.extend(Resolving, {
+            doBar() { }
+        });
+        
+        const FooHandler = Handler.extend(Foo, {
+            constructor() {
+                this.extend({
+                    doFoo() {
+                        expect($composer).to.not.be.null;
+                        return Bar($composer).doBar();
+                    }
+                });
+            }
+        });
+        
+        const BarHandler = Handler.extend(Bar, {
+            constructor() {
+                this.extend({
+                    doBar() {
+                        return "FizzBuzz";
+                    }
+                });
+            }
+        });
+        
+        it("$composer is defined", () => {
+            const context = new Context();
+            context.addHandlers(new FooHandler(), new BarHandler());
+    
+            const result = Foo(context).doFoo();
+            expect(result).to.be.equal("FizzBuzz");
+        });
+    });
 });
