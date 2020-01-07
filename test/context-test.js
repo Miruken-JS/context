@@ -4,7 +4,7 @@ import {
 } from "miruken-core";
 
 import {
-    Handler
+    Handler, $composer
 } from "miruken-callback"
 
 import { Context, ContextState } from "../src/context";
