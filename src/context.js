@@ -281,8 +281,8 @@ export const Context = CompositeHandler.extend(
             }
         },
         resolveContext(resolution) {
-            const decoratee = this.decoratee;
-            return decoratee ? decoratee.resolve(resolution.key) : this;
+            const getDecoratee = this.getDecoratee;
+            return getDecoratee ? getDecoratee().resolve(resolution.key) : this;
         }        
 });
 $provide(Context.prototype, Context, function (resolution) {
