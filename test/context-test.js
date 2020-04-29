@@ -3,9 +3,7 @@ import {
     $using, $decorate, Resolving
 } from "miruken-core";
 
-import {
-    Handler, $composer
-} from "miruken-callback"
+import { Handler, $composer } from "miruken-callback"
 
 import { Context, ContextState } from "../src/context";
 import { contextual } from "../src/contextual";

@@ -22,8 +22,8 @@
       "dist": "dist/amd"
     },
     "dependencies": {
-      "miruken-callback": "0.0.5-alpha.24",
-      "miruken-core": "0.0.5-alpha.3"
+      "miruken-callback": "0.0.5-alpha.27",
+      "miruken-core": "0.0.5-alpha.5"
     },
     "devDependencies": {
       "chai": "^3.5.0"
@@ -68,5 +68,8 @@
     "through2": "^2.0.1",
     "vinyl-paths": "^2.1.0",
     "yargs": "^11.0.0"
+  },
+  "resolutions": {
+    "graceful-fs": "4.2.3"
   }
 }
