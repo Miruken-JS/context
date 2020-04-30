@@ -518,7 +518,7 @@ describe("Contextual", () => {
                   ctx     = $decorate(context, {
                                hello() {}
                             });
-            expect(context).to.equal(ctx.resolve(Context));
+            expect(ctx).to.equal(ctx.resolve(Context));
         });        
     });    
 
