@@ -1,6 +1,6 @@
 import {
     True, Base, Protocol, Disposing,
-    $using, $decorate, Resolving
+    Resolving, $using, $decorate, $decorated
 } from "miruken-core";
 
 import { Handler, $composer } from "miruken-callback"
@@ -519,7 +519,8 @@ describe("Contextual", () => {
                                hello() {}
                             });
             expect(ctx).to.equal(ctx.resolve(Context));
-        });        
+            expect(ctx).to.equal($decorated(ctx.resolve(Context)));
+        });
     });    
 
     describe("$composer with resolving protocols", () => {
