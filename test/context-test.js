@@ -519,7 +519,7 @@ describe("Contextual", () => {
                                hello() {}
                             });
             expect(ctx).to.equal(ctx.resolve(Context));
-            expect(ctx).to.equal($decorated(ctx.resolve(Context)));
+            expect(context).to.equal($decorated(ctx.resolve(Context)));
         });
     });    
 
