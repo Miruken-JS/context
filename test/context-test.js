@@ -7,7 +7,7 @@ import { Handler, $composer } from "miruken-callback"
 
 import { Context, ContextState } from "../src/context";
 import { contextual } from "../src/contextual";
-import "../src/publish";
+import "../src/handler-publish";
 
 import { expect } from "chai";
 
