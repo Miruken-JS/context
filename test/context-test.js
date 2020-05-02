@@ -141,7 +141,7 @@ describe("Context", () => {
     });
 
     describe("#unwindToRootContext", () => {
-        it("should end children except and root and return it", () => {
+        it("should end children except root and return it", () => {
             const context    = new Context(),
                   child1     = context.newChild(),
                   child2     = context.newChild(),
