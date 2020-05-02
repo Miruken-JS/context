@@ -84,10 +84,11 @@ export const Context = CompositeHandler.extend(
     Parenting, Traversing, Disposing, TraversingMixin, {
         constructor(parent) {
             this.base();
-            this._id     = assignID(this);
-            this._parent = parent;
-            this._state  = ContextState.Active;
-            this._children = [];
+            this._id        = assignID(this);
+            this._parent    = parent;
+            this._state     = ContextState.Active;
+            this._children  = [];
+            this._observers = [];
         },
         get id() { return this._id },
         get state() { return this._state; },              
@@ -158,8 +159,7 @@ export const Context = CompositeHandler.extend(
         observe(observer) {
             ensureActive.call(this);
             if ($isNothing(observer)) return;
-            const observers = this._observers || (this._observers = []);
-            observers.push(observer);
+            this._observers.push(observer);
             return () => {
                 const index = this._observers.indexOf(observer);
                 if (index >= 0) {
@@ -206,8 +206,7 @@ function ensureActive() {
 }
 
 function makeNotifier() {
-    const observers = this._observers;
-    return new ContextObserver(observers && observers.slice());
+    return new ContextObserver(this._observers.slice());
 }
 
 const axisBuilder = {
