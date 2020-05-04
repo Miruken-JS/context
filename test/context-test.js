@@ -1,6 +1,7 @@
 import {
     True, Base, Protocol, Disposing,
-    Resolving, $using, $decorate, $decorated
+    ResolvingProtocol, $using, $decorate,
+    $decorated
 } from "miruken-core";
 
 import { Handler, $composer } from "miruken-callback"
@@ -181,13 +182,11 @@ describe("Context", () => {
         it("should wrap context", () => {
             const dog       = new Dog(),
                   context   = new Context(),
-                  wrapped   = context.$self(),
-                  decorated = wrapped.when(True);
+                  wrapped   = context.$self();
             context.store(dog);
             expect(wrapped).to.not.equal(context);
             expect(wrapped.constructor).to.equal(Context);
             expect(wrapped.addHandlers(dog)).to.equal(wrapped);
-            expect(decorated.getDecoratee()).to.equal(wrapped);
             expect(context.resolve(Dog)).to.equal(dog);
         });
 
@@ -524,11 +523,11 @@ describe("Contextual", () => {
     });    
 
     describe("$composer with resolving protocols", () => {
-        const Foo = Protocol.extend(Resolving, {
+        const Foo = Protocol.extend(ResolvingProtocol, {
             doFoo() { }
         });
         
-        const Bar = Protocol.extend(Resolving, {
+        const Bar = Protocol.extend(ResolvingProtocol, {
             doBar() { }
         });
         
