@@ -2,14 +2,14 @@ import {
     Enum, Protocol, Parenting, Disposing,
     Traversing, TraversingAxis, TraversingMixin,
     $isSomething, $isNothing, $classOf, $equals,
-    $decorated, assignID
+    $decorated, assignID, createKeyChain
 } from "miruken-core";
 
 import {
     Composition, CompositeHandler, $provide
 } from "miruken-callback";
 
-const Axis = Symbol();
+const _ = createKeyChain();
 
 /**
  * Represents the state of a {{#crossLink "Context"}}{{/crossLink}}.
@@ -84,17 +84,18 @@ export const Context = CompositeHandler.extend(
     Parenting, Traversing, Disposing, TraversingMixin, {
         constructor(parent) {
             this.base();
-            this._id        = assignID(this);
-            this._parent    = parent;
-            this._state     = ContextState.Active;
-            this._children  = [];
-            this._observers = [];
+            _(this).id        = assignID(this);
+            _(this).parent    = parent;
+            _(this).state     = ContextState.Active;
+            _(this).children  = [];
+            _(this).observers = [];
         },
-        get id() { return this._id },
-        get state() { return this._state; },              
-        get parent() { return this._parent; },                              
-        get children() { return this._children.slice(); },                                            
-        get hasChildren() { return this._children.length > 0; },                             
+
+        get id()          { return _(this).id },
+        get state()       { return _(this).state; },              
+        get parent()      { return _(this).parent; },                              
+        get children()    { return _(this).children.slice(); },                                            
+        get hasChildren() { return _(this).children.length > 0; },                             
         get root() {
             let root = this, parent;    
             while (root && (parent = root.parent)) {
@@ -107,16 +108,16 @@ export const Context = CompositeHandler.extend(
             const parent       = this,
                   childContext = new ($classOf(this))(this).extend({
                 end() {
-                    const index = parent._children.indexOf(childContext);
+                    const index = _(parent).children.indexOf(childContext);
                     if (index < 0) return;
                     const notifier = makeNotifier.call(parent);
                     notifier.childContextEnding(childContext);
-                    parent._children.splice(index, 1);
+                    _(parent).children.splice(index, 1);
                     this.base();
                     notifier.childContextEnded(childContext);                            
                 }
             });
-            this._children.push(childContext);
+            _(this).children.push(childContext);
             return childContext;
         },                                              
         store(object) {
@@ -127,7 +128,7 @@ export const Context = CompositeHandler.extend(
         },
         handleCallback(callback, greedy, composer) {
             let handled = false,
-                axis    = this[Axis];
+                axis    = _(this).axis;
             if (!axis) {
                 handled = this.base(callback, greedy, composer);
                 if (handled && !greedy) { return true; }
@@ -136,7 +137,7 @@ export const Context = CompositeHandler.extend(
                 }
                 return !!handled;                        
             }
-            delete this[Axis];
+            delete _(this).axis;
             if (axis === TraversingAxis.Self) {
                 return this.base(callback, greedy, composer);
             } else {
@@ -153,17 +154,17 @@ export const Context = CompositeHandler.extend(
             if (!(axis instanceof TraversingAxis)) {
                 throw new TypeError("Invalid axis type supplied.");
             }        
-            this[Axis] = axis;
+            _(this).axis = axis;
             return this.handle(callback, greedy, composer);
         },                              
         observe(observer) {
             ensureActive.call(this);
             if ($isNothing(observer)) return;
-            this._observers.push(observer);
+            _(this).observers.push(observer);
             return () => {
-                const index = this._observers.indexOf(observer);
+                const index = _(this).observers.indexOf(observer);
                 if (index >= 0) {
-                    this._observers.splice(index, 1);
+                    _(this).observers.splice(index, 1);
                 }
             };
         },                                             
@@ -186,27 +187,27 @@ export const Context = CompositeHandler.extend(
             return this;
         },
         end() { 
-            if (this._state == ContextState.Active) {
+            if (_(this).state == ContextState.Active) {
                 const notifier = makeNotifier.call(this);
-                this._state = ContextState.Ending;
+                _(this).state = ContextState.Ending;
                 notifier.contextEnding(this);
                 this.unwind();
-                this._state = ContextState.Ended;
+                _(this).state = ContextState.Ended;
                 notifier.contextEnded(this);                        
-                this._observers = null;
+                _(this).observers = null;
             }
         },      
         dispose() { this.end(); }    
 });
 
 function ensureActive() {
-    if (this._state != ContextState.Active) {
+    if (_(this).state != ContextState.Active) {
         throw new Error("The context has already ended.");
     }
 }
 
 function makeNotifier() {
-    return new ContextObserver(this._observers.slice());
+    return new ContextObserver(_(this).observers.slice());
 }
 
 const axisBuilder = {
@@ -214,7 +215,7 @@ const axisBuilder = {
         return this.decorate({
             handleCallback(callback, greedy, composer) {
                 if (!(callback instanceof Composition)) {
-                    this[Axis]= axis;                        
+                    _(this).axis = axis;                        
                 }
                 return this.base(callback, greedy, composer);
             },
