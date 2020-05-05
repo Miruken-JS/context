@@ -84,11 +84,12 @@ export const Context = CompositeHandler.extend(
     Parenting, Traversing, Disposing, TraversingMixin, {
         constructor(parent) {
             this.base();
-            _(this).id        = assignID(this);
-            _(this).parent    = parent;
-            _(this).state     = ContextState.Active;
-            _(this).children  = [];
-            _(this).observers = [];
+            const _this = _(this);
+            _this.id        = assignID(this);
+            _this.parent    = parent;
+            _this.state     = ContextState.Active;
+            _this.children  = [];
+            _this.observers = [];
         },
 
         get id()          { return _(this).id },
@@ -162,9 +163,10 @@ export const Context = CompositeHandler.extend(
             if ($isNothing(observer)) return;
             _(this).observers.push(observer);
             return () => {
-                const index = _(this).observers.indexOf(observer);
+                const { observers } = _(this);
+                const index = observers.indexOf(observer);
                 if (index >= 0) {
-                    _(this).observers.splice(index, 1);
+                    observers.splice(index, 1);
                 }
             };
         },                                             
@@ -187,14 +189,15 @@ export const Context = CompositeHandler.extend(
             return this;
         },
         end() { 
-            if (_(this).state == ContextState.Active) {
+            const _this = _(this);
+            if (_this.state == ContextState.Active) {
                 const notifier = makeNotifier.call(this);
-                _(this).state = ContextState.Ending;
+                _this.state = ContextState.Ending;
                 notifier.contextEnding(this);
                 this.unwind();
-                _(this).state = ContextState.Ended;
+                _this.state = ContextState.Ended;
                 notifier.contextEnded(this);                        
-                _(this).observers = null;
+                delete _(this).observers;
             }
         },      
         dispose() { this.end(); }    
