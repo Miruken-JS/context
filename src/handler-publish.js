@@ -1,5 +1,5 @@
 import { Handler } from "miruken-callback";
-import { ContextualHelper } from "./helper";
+import { ContextualHelper } from "./context-helper";
 
 Handler.implement({
     /**

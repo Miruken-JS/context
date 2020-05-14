@@ -123,7 +123,7 @@ export const Context = CompositeHandler.extend(
         },                                              
         store(object) {
             if ($isSomething(object)) {
-                $provide(this, object);
+                $provide.addHandler(this, object);
             }
             return this;
         },

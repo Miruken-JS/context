@@ -8,8 +8,8 @@ System.config({
 
   map: {
     "chai": "npm:chai@3.5.0",
-    "miruken-callback": "npm:miruken-callback@0.0.5-alpha.42",
-    "miruken-core": "npm:miruken-core@0.0.5-alpha.17",
+    "miruken-callback": "npm:miruken-callback@0.0.5-alpha.46",
+    "miruken-core": "npm:miruken-core@0.0.5-alpha.24",
     "github:jspm/nodelibs-assert@0.1.0": {
       "assert": "npm:assert@1.4.1"
     },
@@ -54,10 +54,10 @@ System.config({
     "npm:inherits@2.0.1": {
       "util": "github:jspm/nodelibs-util@0.1.0"
     },
-    "npm:miruken-callback@0.0.5-alpha.42": {
-      "miruken-core": "npm:miruken-core@0.0.5-alpha.17"
+    "npm:miruken-callback@0.0.5-alpha.46": {
+      "miruken-core": "npm:miruken-core@0.0.5-alpha.24"
     },
-    "npm:miruken-core@0.0.5-alpha.17": {
+    "npm:miruken-core@0.0.5-alpha.24": {
       "reflect-metadata": "npm:reflect-metadata@0.1.13"
     },
     "npm:process@0.11.9": {

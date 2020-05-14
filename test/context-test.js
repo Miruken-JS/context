@@ -532,14 +532,10 @@ describe("Contextual", () => {
         });
         
         const FooHandler = Handler.extend(Foo, {
-            constructor() {
-                this.extend({
-                    doFoo() {
-                        expect($composer).to.not.be.null;
-                        return Bar($composer).doBar();
-                    }
-                });
-            }
+            doFoo() {
+                expect($composer).to.not.be.null;
+                    return Bar($composer).doBar();
+             }            
         });
         
         const BarHandler = Handler.extend(Bar, {
