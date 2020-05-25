@@ -6,7 +6,7 @@ import {
 } from "miruken-core";
 
 import {
-    Composition, CompositeHandler, $provide
+    Composition, CompositeHandler, provides
 } from "miruken-callback";
 
 const _ = createKeyChain();
@@ -123,7 +123,7 @@ export const Context = CompositeHandler.extend(
         },                                              
         store(object) {
             if ($isSomething(object)) {
-                $provide.addHandler(this, object);
+                provides.addHandler(this, object);
             }
             return this;
         },
