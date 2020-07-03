@@ -1,14 +1,18 @@
 import {
-    True, Base, Protocol, Disposing,
-    ResolvingProtocol, conformsTo,
-    $using, $decorate, $decorated
+    True, Base, Protocol, ResolvingProtocol,
+    disposable, conformsTo, pcopy, $using,
+    $decorate, $decorated
 } from "miruken-core";
 
-import { Handler, $composer } from "miruken-callback"
+import { 
+    Handler, StaticHandler,
+    provides, $composer
+} from "miruken-callback"
 
 import { Context, ContextState } from "../src/context";
-import contextual from "../src/contextual";
-import "../src/handler-publish";
+import { Contextual, contextual } from "../src/contextual";
+import scoped from "../src/contextual-lifestyle";
+import "../src/handler-context";
 
 import { expect } from "chai";
 
@@ -523,6 +527,81 @@ describe("Contextual", () => {
             expect(context).to.equal($decorated(ctx.resolve(Context)));
         });
     });    
+
+    describe("decorating contextual", () => {
+        it("should decorate contextual", () => {
+            const context     = new Context(),
+                  controller  = new Controller(),
+                  controllerx = pcopy(controller).extend({
+                      set context(value) {
+                          if (value == null) {
+                              controller.context = null;
+                          } else if (this.context != value) {
+                              throw new Error("The context cannot be changed.");
+                          }
+                      }
+                  });
+            controller.context = context;
+            expect(controller.context).to.equal(context);
+            expect(controllerx.context).to.equal(context);
+            expect(() => {
+                controllerx.context = new Context();
+            }).to.throw(Error, "The context cannot be changed.");
+            controllerx.context = context;
+            expect(controllerx.context).to.equal(context);
+            controllerx.context = null;
+            expect(controllerx.context).to.be.undefined;
+            expect(controller.context).to.be.undefined;
+        });
+    });
+
+    describe("ContextualLifestyle", () => {
+        @provides() @scoped()
+        @contextual @disposable class Screen {
+            _dispose() {
+                this.closed = true;
+            }            
+        }
+
+        it("should create scoped instances without qualifier", () => {
+            let screen;
+            $using(new Context(), context => {
+                context.addHandlers(new StaticHandler(Screen));
+                screen = context.resolve(Screen);
+                expect(screen).to.exist;
+                expect(screen.context).to.equal(context);
+                expect(screen).to.equal(context.resolve(Screen));
+                expect(screen.closed).to.not.be.true;
+                $using(context.newChild(), child => {
+                    const screen2 = child.resolve(Screen);
+                    expect(screen2).to.exist;
+                    expect(screen2).to.equal(screen);
+                    expect(child.parent).to.equal(screen2.context);
+                });
+            });
+            expect(screen.closed).to.be.true;
+        });
+
+        it("should create context getter/setter if not found", () => {
+            @provides() @scoped()
+            @conformsTo(Contextual) class Door {}
+
+            let door;
+            $using(new Context(), context => {
+                context.addHandlers(new StaticHandler(Door));
+                door = context.resolve(Door);
+                expect(door).to.exist;
+                expect(door.context).to.equal(context);
+                expect(door).to.equal(context.resolve(Door));
+                $using(context.newChild(), child => {
+                    const door2 = child.resolve(Door);
+                    expect(door2).to.exist;
+                    expect(door2).to.equal(door);
+                    expect(child.parent).to.equal(door2.context);
+                });
+            });
+        });
+    });
 
     describe("$composer with resolving protocols", () => {
         const Foo = Protocol.extend(ResolvingProtocol, {

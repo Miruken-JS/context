@@ -1,9 +1,9 @@
 import {
     Enum, Protocol, Parenting, Disposing,
-    Traversing, TraversingAxis, TraversingMixin,
-    conformsTo, traversingMixin, $isSomething,
-    $isNothing, $classOf, $equals, $decorated,
-    assignID, createKeyChain
+    Traversing, TraversingAxis, conformsTo,
+    traversable, $isNothing, $classOf,
+    $equals, $decorated, assignID,
+    createKeyChain
 } from "miruken-core";
 
 import {
@@ -78,11 +78,11 @@ export const ContextObserver = Protocol.extend({
  * @extends CompositeHandler
  * @uses Parenting
  * @uses Traversing
- * @uses TraversingMixin
  * @uses Disposing
  */
+@traversable
 @conformsTo(Parenting, Disposing)
-export class Context extends traversingMixin(CompositeHandler) {
+export class Context extends CompositeHandler {
         constructor(parent) {
             super();
             const _this = _(this);
@@ -125,7 +125,7 @@ export class Context extends traversingMixin(CompositeHandler) {
         }    
 
         store(object) {
-            if ($isSomething(object)) {
+            if (!$isNothing(object)) {
                 provides.addHandler(this, object);
             }
             return this;
@@ -245,3 +245,5 @@ TraversingAxis.items.forEach(axis => {
 });
 
 Context.implement(axisBuilder);
+
+export default Context;

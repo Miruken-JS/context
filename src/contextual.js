@@ -1,7 +1,13 @@
-import { ContextState } from "./context";
+import { Protocol, conformsTo } from "miruken-core";
 import { $composer } from "miruken-callback";
+import { ContextState } from "./context";
 
 const ContextField = Symbol();
+
+export const Contextual = Protocol.extend({
+    get context() {},
+    set context(value) {}
+});
 
 /**
  * Decorator/mixin to make classes contextual.<br/>
@@ -16,7 +22,7 @@ const ContextField = Symbol();
  * @param {Function}  target  -  target to contextualize
  */ 
 export const contextual = Base =>
-    class extends Base {
+    @conformsTo(Contextual) class extends Base {
         /**
          * The context associated with the receiver.
          * @property {Context} context
@@ -24,7 +30,7 @@ export const contextual = Base =>
         get context() { return this[ContextField]; }
         set context(context) {
             const field = this[ContextField];
-            if (field === context) { return; }
+            if (field === context) return;
             if (field) {
                 field.removeHandlers(this);
             }
