@@ -1,8 +1,9 @@
 import {
     Enum, Protocol, Parenting, Disposing,
     Traversing, TraversingAxis, TraversingMixin,
-    $isSomething, $isNothing, $classOf, $equals,
-    $decorated, assignID, createKeyChain
+    conformsTo, traversingMixin, $isSomething,
+    $isNothing, $classOf, $equals, $decorated,
+    assignID, createKeyChain
 } from "miruken-core";
 
 import {
@@ -79,31 +80,32 @@ export const ContextObserver = Protocol.extend({
  * @uses Traversing
  * @uses TraversingMixin
  * @uses Disposing
- */    
-export const Context = CompositeHandler.extend(
-    Parenting, Traversing, Disposing, TraversingMixin, {
+ */
+@conformsTo(Parenting, Disposing)
+export class Context extends traversingMixin(CompositeHandler) {
         constructor(parent) {
-            this.base();
+            super();
             const _this = _(this);
             _this.id        = assignID(this);
             _this.parent    = parent;
             _this.state     = ContextState.Active;
             _this.children  = [];
             _this.observers = [];
-        },
+        }
 
-        get id()          { return _(this).id },
-        get state()       { return _(this).state; },              
-        get parent()      { return _(this).parent; },                              
-        get children()    { return _(this).children.slice(); },                                            
-        get hasChildren() { return _(this).children.length > 0; },                             
+        get id()          { return _(this).id }
+        get state()       { return _(this).state; }           
+        get parent()      { return _(this).parent; }                           
+        get children()    { return _(this).children.slice(); }                                           
+        get hasChildren() { return _(this).children.length > 0; }                           
         get root() {
             let root = this, parent;    
             while (root && (parent = root.parent)) {
                 root = parent;
             }
             return root;
-        },
+        }
+
         newChild() {
             ensureActive.call(this);
             const parent       = this,
@@ -120,18 +122,20 @@ export const Context = CompositeHandler.extend(
             });
             _(this).children.push(childContext);
             return childContext;
-        },                                              
+        }    
+
         store(object) {
             if ($isSomething(object)) {
                 provides.addHandler(this, object);
             }
             return this;
-        },
+        }
+
         handleCallback(callback, greedy, composer) {
             let handled = false,
                 axis    = _(this).axis;
             if (!axis) {
-                handled = this.base(callback, greedy, composer);
+                handled = super.handleCallback(callback, greedy, composer);
                 if (handled && !greedy) { return true; }
                 if (this.parent) {
                     handled = handled | this.parent.handle(callback, greedy, composer);
@@ -140,24 +144,26 @@ export const Context = CompositeHandler.extend(
             }
             delete _(this).axis;
             if (axis === TraversingAxis.Self) {
-                return this.base(callback, greedy, composer);
+                return super.handleCallback(callback, greedy, composer);
             } else {
                 this.traverse(axis, node => {
                     handled = handled | ($equals(node, this)
-                            ? this.base(callback, greedy, composer)
+                            ? super.handleCallback(callback, greedy, composer)
                             : node.handleAxis(TraversingAxis.Self, callback, greedy, composer));
                     return handled && !greedy;
                 }, this);
             }
             return !!handled;
-        },           
+        }
+
         handleAxis(axis, callback, greedy, composer) {
             if (!(axis instanceof TraversingAxis)) {
                 throw new TypeError("Invalid axis type supplied.");
             }        
             _(this).axis = axis;
             return this.handle(callback, greedy, composer);
-        },                              
+        }
+
         observe(observer) {
             ensureActive.call(this);
             if ($isNothing(observer)) return;
@@ -169,7 +175,8 @@ export const Context = CompositeHandler.extend(
                     observers.splice(index, 1);
                 }
             };
-        },                                             
+        }
+
         unwindToRootContext() {
             let current = this;
             while (current) {
@@ -181,13 +188,15 @@ export const Context = CompositeHandler.extend(
                 current = parent;
             }
             return this;
-        },
+        }
+
         unwind() {
             for (const child of this.children) {
                 child.end();
             }
             return this;
-        },
+        }
+
         end() { 
             const _this = _(this);
             if (_this.state == ContextState.Active) {
@@ -199,9 +208,10 @@ export const Context = CompositeHandler.extend(
                 notifier.contextEnded(this);                        
                 delete _(this).observers;
             }
-        },      
+        }
+
         dispose() { this.end(); }    
-});
+}
 
 function ensureActive() {
     if (_(this).state != ContextState.Active) {

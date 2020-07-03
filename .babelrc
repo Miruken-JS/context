@@ -1,11 +1,13 @@
 {
-	"plugins": [
-		"transform-decorators-legacy",
-        "transform-es2015-block-scoping"
-	],
+    "plugins": [
+        ["@babel/plugin-proposal-decorators", { "legacy": true }],
+        ["babel-plugin-parameter-decorator"],
+        ["@babel/plugin-proposal-class-properties", { "loose": false }],
+         "@babel/plugin-transform-block-scoping",
+    ],
     "presets": [
-        ["env", {
-			"modules": false,
+        ["@babel/env", {
+            "modules": false,
             "targets": {
                 "browsers": [ "last 2 Chrome versions" ]
             }

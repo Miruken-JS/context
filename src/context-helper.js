@@ -6,33 +6,35 @@ import { ContextState, Context } from "./context";
  * @class ContextualHelper
  * @extends Module
  */    
-export const ContextualHelper = Module.extend({
+export class ContextualHelper {
     /**
      * Resolves the receivers context.
      * @method resolveContext
      * @returns {Context} receiver if a context or the receiver context. 
      */                
-    resolveContext(contextual) {
+    static resolveContext(contextual) {
         return $isNothing(contextual) || (contextual instanceof Context)
              ? contextual
              : contextual.context;
-    },
+    }
+
     /**
      * Ensure the receiver is associated with a context.
      * @method requireContext
      * @throws {Error} an error if a context could not be resolved.
      */                        
-    requireContext(contextual) {
+    static requireContext(contextual) {
         const context = ContextualHelper.resolveContext(contextual);
         if (!(context instanceof Context))
             throw new Error("The supplied object is not a Context or Contextual object.");
         return context;
-    },
+    }
+
     /**
      * Clears and ends the receivers associated context.
      * @method clearContext
      */                                
-    clearContext(contextual) {
+    static clearContext(contextual) {
         const context = contextual.context;
         if (context) {
             try {
@@ -42,7 +44,8 @@ export const ContextualHelper = Module.extend({
                 contextual.context = null;
             }
         }
-    },
+    }
+
     /**
      * Attaches the context to the receiver.
      * @method bindContext
@@ -51,12 +54,13 @@ export const ContextualHelper = Module.extend({
      * @returns {Context} effective context.
      * @throws {Error} an error if the context could be attached.
      */                                        
-    bindContext(contextual, context, replace) {
+    static bindContext(contextual, context, replace) {
         if (contextual && (replace || !contextual.context)) {
             contextual.context = ContextualHelper.resolveContext(context);
         }
         return contextual;
-    },
+    }
+
     /**
      * Attaches a child context of the receiver to the contextual child.
      * @method bindChildContext
@@ -65,7 +69,7 @@ export const ContextualHelper = Module.extend({
      * @returns {Context} effective child context.
      * @throws {Error} an error if the child context could be attached.
      */                                                
-    bindChildContext(contextual, child, replace) {
+    static bindChildContext(contextual, child, replace) {
         let childContext;
         if (child) {
             if (!replace) {
@@ -85,4 +89,4 @@ export const ContextualHelper = Module.extend({
         }
         return childContext;
     }
-});
+}

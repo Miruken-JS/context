@@ -1,19 +1,19 @@
 import {
     True, Base, Protocol, Disposing,
-    ResolvingProtocol, $using, $decorate,
-    $decorated
+    ResolvingProtocol, conformsTo,
+    $using, $decorate, $decorated
 } from "miruken-core";
 
 import { Handler, $composer } from "miruken-callback"
 
 import { Context, ContextState } from "../src/context";
-import { contextual } from "../src/contextual";
+import contextual from "../src/contextual";
 import "../src/handler-publish";
 
 import { expect } from "chai";
 
 describe("Context", () => {
-    const Dog = Base.extend({});
+    class Dog extends Base {}
     
     describe("#getState", () => {
         it("should start in the active state", () => {
@@ -433,16 +433,18 @@ describe("Context", () => {
         it("should publish to all descendants", () => {
             let   count     = 0;
             const Observing = Protocol.extend({
-                    observe() {}
-                }),
-                Observer = Base.extend(Observing, {
-                    observe() { ++count; }
-                }),
-                root       = new Context(),
-                child1     = root.newChild(),
-                child2     = root.newChild(),
-                child3     = root.newChild(),
-                grandChild = child3.newChild();
+                      observe() {}
+                  }),
+                  Observer =
+                      @conformsTo(Observing) 
+                      class extends Base {
+                          observe() { ++count; }
+                      },
+                  root       = new Context(),
+                  child1     = root.newChild(),
+                  child2     = root.newChild(),
+                  child3     = root.newChild(),
+                  grandChild = child3.newChild();
             root.addHandlers(new Observer);
             child1.addHandlers(new Observer);
             child1.addHandlers(new Observer);            
@@ -456,8 +458,8 @@ describe("Context", () => {
 });
 
 describe("Contextual", () => {
-    const Controller = Base.extend(contextual, {
-    });
+    @contextual
+    class Controller extends Base {}
 
     describe("#setContext", () => {
         it("should be able to set context", () => {
@@ -531,22 +533,23 @@ describe("Contextual", () => {
             doBar() { }
         });
         
-        const FooHandler = Handler.extend(Foo, {
+        const FooHandler = @conformsTo(Foo) class extends Handler {
             doFoo() {
                 expect($composer).to.not.be.null;
                     return Bar($composer).doBar();
              }            
-        });
-        
-        const BarHandler = Handler.extend(Bar, {
+        }
+
+        const BarHandler = @conformsTo(Bar) class extends Handler {
             constructor() {
+                super();
                 this.extend({
                     doBar() {
                         return "FizzBuzz";
                     }
                 });
             }
-        });
+        }
         
         it("$composer is defined", () => {
             const context = new Context();

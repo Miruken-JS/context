@@ -2,24 +2,22 @@ var gulp             = require("gulp");
 var runSequence      = require("run-sequence");
 var paths            = require("../paths");
 var rollup           = require("rollup").rollup;
-var resolve          = require("rollup-plugin-node-resolve");
-var rollupMultiEntry = require("rollup-plugin-multi-entry");
-var rollupBabel      = require("rollup-plugin-babel");
+var resolve          = require("@rollup/plugin-node-resolve").default;
+var rollupMultiEntry = require("@rollup/plugin-multi-entry");
+var rollupBabel      = require("@rollup/plugin-babel").default;
 var camelCase        = require("camelcase");
+var pkg              = require('../../package.json');
 
 var jsName = paths.packageName + '.js';
 
 gulp.task("rollup", function(done) {
     rollup({
         input:   paths.source,
-        external: [
-            "miruken-core",
-            "miruken-callback"
-        ],
+        external: Object.keys(pkg.jspm.dependencies),
         plugins: [
             rollupMultiEntry(),
-            rollupBabel(),
-            resolve()
+            rollupBabel({ babelHelpers: 'bundled' }),
+            resolve()            
         ]
     })
     .then(function(bundle) {
@@ -28,13 +26,7 @@ gulp.task("rollup", function(done) {
             bundle.write({
                 file:       paths.output + moduleType + '/' + jsName,
                 format:     moduleType,
-                name: camelCase(paths.packageName),
-                output: {
-                    globals: {
-                        "miruken-core": "mirukenCore",
-                        "miruken-callback": "mirukenCallback"
-                    }
-                }
+                name: camelCase(paths.packageName)
             });
         }); 
         console.log('Build complete');
