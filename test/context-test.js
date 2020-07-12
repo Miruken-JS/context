@@ -1,16 +1,21 @@
 import {
     True, Base, Protocol, ResolvingProtocol,
-    disposable, conformsTo, pcopy, $using,
-    $decorate, $decorated
+    disposable, conformsTo, type, pcopy,
+    $using, $decorate, $decorated
 } from "miruken-core";
 
 import { 
-    Handler, InferenceHandler, provides, $composer
+    Handler, InferenceHandler, provides,
+    singleton, $composer
 } from "miruken-callback"
 
 import { Context, ContextState } from "../src/context";
 import { Contextual, contextual } from "../src/contextual";
-import { scoped, scopedQualifier } from "../src/contextual-lifestyle";
+
+import { 
+    scoped, scopedRooted, scopedQualifier
+} from "../src/contextual-lifestyle";
+
 import "../src/handler-context";
 
 import { expect } from "chai";
@@ -562,6 +567,18 @@ describe("Contextual", () => {
             }            
         }
 
+        @provides() @scopedRooted()
+        @contextual @disposable class Rooted {
+            _dispose() {
+                this.closed = true;
+            }            
+        }
+
+        @provides() @singleton()
+        class LifestyleMismatch {
+            constructor(@type(Screen) screen) {}
+        }
+
         it("should create scoped instances without qualifier", () => {
             let screen;
             $using(new Context(), context => {
@@ -601,6 +618,26 @@ describe("Contextual", () => {
             expect(screen.closed).to.be.true;
         });
 
+        it("should create rooted scoped instances with qualifier", () => {
+            let rooted;
+            $using(new Context(), context => {
+                context.addHandlers(new InferenceHandler(Rooted));
+                rooted = context.resolve(Rooted);
+                expect(rooted).to.exist;
+                expect(rooted.context).to.equal(context);
+                expect(rooted).to.equal(context.resolve(Rooted));
+                expect(rooted.closed).to.not.be.true;
+                $using(context.newChild(), child => {
+                    const rooted2 = child.resolve(Rooted,
+                        c => c.require(scopedQualifier));
+                    expect(rooted2).to.exist;
+                    expect(rooted2).to.equal(rooted);
+                    expect(context).to.equal(rooted2.context);
+                });
+            });
+            expect(rooted.closed).to.be.true;
+        });
+
         it("should create context getter/setter if not found", () => {
             @provides() @scoped()
             @conformsTo(Contextual) class Door {}
@@ -619,6 +656,43 @@ describe("Contextual", () => {
                     expect(child.parent).to.equal(door2.context);
                 });
             });
+        });
+
+        it("should reject scoped creation if no context", () => {
+            const screen = (new Handler()).resolve(Screen);
+            expect(screen).to.not.exist;
+        });
+
+        it("should reject changing managed context", () => {
+            $using(new Context(), context => {
+                context.addHandlers(new InferenceHandler(Screen));
+                const screen = context.resolve(Screen);
+                expect(screen.context).to.equal(context);
+                expect(() => {
+                    screen.context = new Context();
+                }).to.throw(Error, "Managed instances cannot change context.");
+            });
+        });
+
+        it("should detach from context when assigned null", () => {
+            $using(new Context(), context => {
+                context.addHandlers(new InferenceHandler(Screen));
+                const screen = context.resolve(Screen);
+                expect(screen.context).to.equal(context);
+                screen.context = null;
+                const screen2 = context.resolve(Screen);
+                expect(screen2).to.exist;
+                expect(screen2).to.not.equal(screen);
+                expect(screen.closed).to.be.true;
+            });
+        });
+
+        it("should reject scoped dependency in singleton", () => {
+            $using(new Context(), context => {
+                context.addHandlers(new InferenceHandler(Screen, LifestyleMismatch));
+                const mismatch = context.resolve(LifestyleMismatch);
+                expect(mismatch).to.not.exist;
+            });        
         });
     });
 

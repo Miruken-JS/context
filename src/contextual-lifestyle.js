@@ -149,4 +149,7 @@ export const scoped = createFilterDecorator(
     (target, key, descriptor, [rooted]) => 
         rooted === true ? provideRootedContextual : provideContextual);
 
+export const scopedRooted = createFilterDecorator(
+    (target, key, descriptor) => provideRootedContextual);
+
 export default scoped;
