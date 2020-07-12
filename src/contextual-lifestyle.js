@@ -84,10 +84,10 @@ function bindContext(instance, context, cache) {
             set(value) {
                 if (value != null) {
                     if (get.call(managed) == null) {
-                        throw new Error("Managed instance has been evicted.");
+                        throw new Error("The managed contextual instance has been evicted.");
                     }
                     if (value !== context) {
-                        throw new Error("Managed instances cannot change context.");
+                        throw new Error("The managed contextual instance cannot change context.");
                     }
                 } else if (cache.get(context) === managed) {
                     cache.delete(context);

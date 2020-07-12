@@ -670,7 +670,7 @@ describe("Contextual", () => {
                 expect(screen.context).to.equal(context);
                 expect(() => {
                     screen.context = new Context();
-                }).to.throw(Error, "Managed instances cannot change context.");
+                }).to.throw(Error, "The managed contextual instance cannot change context.");
             });
         });
 
@@ -684,6 +684,18 @@ describe("Contextual", () => {
                 expect(screen2).to.exist;
                 expect(screen2).to.not.equal(screen);
                 expect(screen.closed).to.be.true;
+            });
+        });
+
+        it("should reject changing managed context if evicted", () => {
+            $using(new Context(), context => {
+                context.addHandlers(new InferenceHandler(Screen));
+                const screen = context.resolve(Screen);
+                expect(screen.context).to.equal(context);
+                screen.context = null;
+                expect(() => {
+                    screen.context = new Context();
+                }).to.throw(Error, "The managed contextual instance has been evicted.");
             });
         });
 
