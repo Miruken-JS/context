@@ -6,6 +6,7 @@ import {
 
 import { 
     Lifestyle, LifestyleProvider, filter,
+    QualifierConstraint, ConstraintProvider,
     createFilterDecorator 
 } from "miruken-callback";
 
@@ -132,14 +133,20 @@ function setContext(context) {
 export class ContextualLifestyleProvider extends LifestyleProvider {
     constructor(rooted) {
         super(new ContextualLifestyle());
-        _(this).rooted = !!rooted;
+        _(this).rooted = rooted;
     }
 
     get rooted() { return _(this).rooted; }
 }
 
+export const scopedQualifier = new QualifierConstraint();
+
+const scopedProvider          = new ConstraintProvider(scopedQualifier),
+      provideContextual       = [new ContextualLifestyleProvider(false), scopedProvider],
+      provideRootedContextual = [new ContextualLifestyleProvider(true), scopedProvider];
+
 export const scoped = createFilterDecorator(
     (target, key, descriptor, [rooted]) => 
-        new ContextualLifestyleProvider(rooted));
+        rooted === true ? provideRootedContextual : provideContextual);
 
 export default scoped;

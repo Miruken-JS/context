@@ -3,7 +3,8 @@
         ["@babel/plugin-proposal-decorators", { "legacy": true }],
         ["babel-plugin-parameter-decorator"],
         ["@babel/plugin-proposal-class-properties", { "loose": false }],
-         "@babel/plugin-transform-block-scoping",
+        ["@babel/plugin-proposal-optional-chaining", { "loose": true }],
+        ["@babel/plugin-transform-block-scoping"]
     ],
     "presets": [
         ["@babel/env", {

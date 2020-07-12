@@ -5,13 +5,12 @@ import {
 } from "miruken-core";
 
 import { 
-    Handler, StaticHandler,
-    provides, $composer
+    Handler, InferenceHandler, provides, $composer
 } from "miruken-callback"
 
 import { Context, ContextState } from "../src/context";
 import { Contextual, contextual } from "../src/contextual";
-import scoped from "../src/contextual-lifestyle";
+import { scoped, scopedQualifier } from "../src/contextual-lifestyle";
 import "../src/handler-context";
 
 import { expect } from "chai";
@@ -566,7 +565,7 @@ describe("Contextual", () => {
         it("should create scoped instances without qualifier", () => {
             let screen;
             $using(new Context(), context => {
-                context.addHandlers(new StaticHandler(Screen));
+                context.addHandlers(new InferenceHandler(Screen));
                 screen = context.resolve(Screen);
                 expect(screen).to.exist;
                 expect(screen.context).to.equal(context);
@@ -582,13 +581,33 @@ describe("Contextual", () => {
             expect(screen.closed).to.be.true;
         });
 
+        it("should create scoped instances with qualifier", () => {
+            let screen;
+            $using(new Context(), context => {
+                context.addHandlers(new InferenceHandler(Screen));
+                screen = context.resolve(Screen);
+                expect(screen).to.exist;
+                expect(screen.context).to.equal(context);
+                expect(screen).to.equal(context.resolve(Screen));
+                expect(screen.closed).to.not.be.true;
+                $using(context.newChild(), child => {
+                    const screen2 = child.resolve(Screen,
+                        c => c.require(scopedQualifier));
+                    expect(screen2).to.exist;
+                    expect(screen2).to.not.equal(screen);
+                    expect(child).to.equal(screen2.context);
+                });
+            });
+            expect(screen.closed).to.be.true;
+        });
+
         it("should create context getter/setter if not found", () => {
             @provides() @scoped()
             @conformsTo(Contextual) class Door {}
 
             let door;
             $using(new Context(), context => {
-                context.addHandlers(new StaticHandler(Door));
+                context.addHandlers(new InferenceHandler(Door));
                 door = context.resolve(Door);
                 expect(door).to.exist;
                 expect(door.context).to.equal(context);
