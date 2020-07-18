@@ -246,4 +246,3 @@ TraversingAxis.items.forEach(axis => {
 
 Context.implement(axisBuilder);
 
-export default Context;

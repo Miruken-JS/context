@@ -3,12 +3,6 @@ var paths = require('./build/paths');
 module.exports = function(config) {
 
     config.set({
-
-        xplugins: [
-            'karma-babel-preprocessor', 
-            'karma-mocha',
-            'karma-chrome-launcher',
-        ],
         
         frameworks: ['jspm', 'mocha', 'chai'],
 

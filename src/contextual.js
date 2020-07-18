@@ -74,5 +74,4 @@ export const contextual = Base =>
             if (field) field.end();
         }      
     };
-
-export default contextual;
+    

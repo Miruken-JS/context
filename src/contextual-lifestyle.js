@@ -10,7 +10,7 @@ import {
     createFilterDecorator 
 } from "miruken-callback";
 
-import Context from "./context";
+import { Context } from "./context";
 import { Contextual } from "./contextual";
 
 const _ = createKey();
@@ -152,4 +152,3 @@ export const scoped = createFilterDecorator(
 export const scopedRooted = createFilterDecorator(
     (target, key, descriptor) => provideRootedContextual);
 
-export default scoped;

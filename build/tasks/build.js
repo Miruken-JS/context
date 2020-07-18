@@ -17,7 +17,7 @@ gulp.task("rollup", function(done) {
         plugins: [
             rollupMultiEntry(),
             rollupBabel({ babelHelpers: 'bundled' }),
-            resolve()            
+            resolve()
         ]
     })
     .then(function(bundle) {
