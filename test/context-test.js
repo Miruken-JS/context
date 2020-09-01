@@ -6,8 +6,8 @@ import {
 
 import { 
     Handler, InferenceHandler, provides,
-    singleton, $composer
-} from "miruken-callback"
+    singleton, $getComposer
+} from "miruken-callback";
 
 import { Context, ContextState } from "../src/context";
 import { Contextual, contextual } from "../src/contextual";
@@ -719,8 +719,9 @@ describe("Contextual", () => {
         
         const FooHandler = @conformsTo(Foo) class extends Handler {
             doFoo() {
-                expect($composer).to.not.be.null;
-                    return Bar($composer).doBar();
+                const composer = $getComposer();
+                expect(composer).to.not.be.null;
+                return Bar(composer).doBar();
              }            
         }
 
