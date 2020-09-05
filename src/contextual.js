@@ -2,7 +2,7 @@ import {
     Protocol, conformsTo, $isNothing 
 } from "miruken-core";
 
-import { $getComposer } from "miruken-callback";
+import { $composer } from "miruken-callback";
 import { ContextState } from "./context";
 
 const ContextField = Symbol();
@@ -60,7 +60,7 @@ export const contextual = Base =>
          * @method endCallingContext
          */
         endCallingContext() {
-            const composer = $getComposer();
+            const composer = $composer;
             if ($isNothing(composer)) return;
             const context = composer.resolve(Context);
             if (context && (context !== this.context)) {
